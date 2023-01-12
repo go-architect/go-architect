@@ -50,7 +50,7 @@ export default defineComponent({
   },
   data() {
     return {
-      dsm: [] as string[][]
+      dsm: [] as string[][],
     }
   },
   methods: {

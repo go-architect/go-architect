@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/fdaines/go-architect-lib/coupling"
 	"github.com/fdaines/go-architect-lib/dependency"
 	"github.com/fdaines/go-architect-lib/dsm"
@@ -12,6 +13,7 @@ import (
 	"github.com/fdaines/go-architect-lib/metrics/types"
 	"github.com/fdaines/go-architect-lib/project"
 	"github.com/fdaines/go-architect-lib/repository"
+	localDSM "github.com/fdaines/go-architect/backend/dsm"
 	"github.com/fdaines/go-architect/backend/gocyclo"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	exec "golang.org/x/sys/execabs"
@@ -98,6 +100,7 @@ func (a *Api) GetDSM(project *project.ProjectInfo) *dsm.DependencyStructureMatri
 		runtime.LogErrorf(a.ctx, "GetDSM - Error: %s\n", err.Error())
 		return nil
 	}
+	result = localDSM.RearrangeDSM(result)
 	return result
 }
 
@@ -119,11 +122,22 @@ func (a *Api) GetDependencyCoupling(project *project.ProjectInfo, dependency str
 	return result
 }
 
-func (a *Api) GetMetricsComplexity(project *project.ProjectInfo) *gocyclo.GoCycloOutput {
+func (a *Api) GetMetricsComplexity(project *project.ProjectInfo) (*gocyclo.GoCycloOutput, error) {
 	bytes, err := exec.Command("gocyclo", "-top", "5", "-avg", project.Path).Output()
 	if err != nil {
-		runtime.LogErrorf(a.ctx, "Cannot use GoCyclo Tool, please check module documentation at 'https://github.com/fzipp/gocyclo'. Details: %s\n", err.Error())
-		return nil
+		errorMessage := "cannot use GoCyclo Tool, please check module documentation at 'https://github.com/fzipp/gocyclo'"
+		runtime.LogErrorf(a.ctx, "%s. Details: %s\n", errorMessage, err.Error())
+		return nil, fmt.Errorf(errorMessage)
 	}
-	return gocyclo.MapToGoCycloModel(string(bytes))
+	return gocyclo.MapToGoCycloModel(string(bytes)), nil
+}
+
+func (a *Api) GetMetricsCognitiveComplexity(project *project.ProjectInfo) (*gocyclo.GoCycloOutput, error) {
+	bytes, err := exec.Command("gocognit", "-top", "5", "-avg", project.Path).Output()
+	if err != nil {
+		errorMessage := "cannot use GoCognit Tool, please check module documentation at 'https://github.com/uudashr/gocognit'"
+		runtime.LogErrorf(a.ctx, "%s. details: %s\n", errorMessage, err.Error())
+		return nil, fmt.Errorf(errorMessage)
+	}
+	return gocyclo.MapToGoCycloModel(string(bytes)), nil
 }

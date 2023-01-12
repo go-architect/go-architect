@@ -4,10 +4,12 @@ import {
   GetMetricsInterfaces,
   GetMetricsTypes,
   GetMetricsComments,
-  GetMetricsComplexity
+  GetMetricsComplexity,
+  GetMetricsCognitiveComplexity
 } from "../../../wailsjs/go/main/Api";
 import Comments from "./metrics/Comments.vue"
 import Complexity from "./metrics/Complexity.vue"
+import CognitiveComplexity from "./metrics/CognitiveComplexity.vue"
 import Interfaces from "./metrics/Interfaces.vue"
 import LinesOfCode from "./metrics/LinesOfCode.vue"
 import Types from "./metrics/Types.vue"
@@ -20,19 +22,30 @@ const data = reactive({
   comments: undefined as comments.CommentsMetrics | undefined,
   types: undefined as types.ProjectTypes | undefined,
   interfaces: undefined as interfaces.InterfaceMetrics | undefined,
-  cyclo: undefined,
+  cyclomaticComplexity: undefined,
+  cognitiveComplexity: undefined,
+  cyclomaticComplexityError: undefined,
+  cognitiveComplexityError: undefined,
 })
 
 onMounted(async () => {
   if(props.project != null){
-    [data.loc, data.comments, data.types, data.interfaces, data.cyclo] = await Promise.all([
+    [data.loc, data.comments, data.types, data.interfaces] = await Promise.all([
       GetMetricsLOC(props.project),
       GetMetricsComments(props.project),
       GetMetricsTypes(props.project),
       GetMetricsInterfaces(props.project),
-      GetMetricsComplexity(props.project)
     ])
-    console.log(data.cyclo)
+    try {
+      data.cognitiveComplexity = await GetMetricsCognitiveComplexity(props.project)
+    } catch(error: any) {
+      data.cognitiveComplexityError = error
+    }
+    try {
+      data.cyclomaticComplexity = await GetMetricsComplexity(props.project)
+    } catch(error: any) {
+      data.cyclomaticComplexity = error
+    }
   }
 })
 </script>
@@ -53,7 +66,8 @@ onMounted(async () => {
           <interfaces :data="data.interfaces" />
         </div>
         <div class="col-md-12 col-lg-4">
-          <complexity :data=data.cyclo />
+          <complexity :data=data.cyclomaticComplexity :error=data.cyclomaticComplexityError />
+          <cognitive-complexity :data=data.cognitiveComplexity :error=data.cognitiveComplexityError />
         </div>
       </div>
     </div>

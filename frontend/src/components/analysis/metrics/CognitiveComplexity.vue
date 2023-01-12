@@ -5,7 +5,7 @@ const props = defineProps(['data', 'error'])
 <template>
   <div class="card card-primary card-outline">
     <div class="card-header">
-      <h3 class="card-title">Functions Complexity</h3>
+      <h3 class="card-title">Functions Cognitive Complexity</h3>
     </div>
     <div class="card-body">
       <div v-if="props.data == undefined && props.error == undefined" class="overlay-wrapper">

@@ -5,8 +5,8 @@ import {dsm} from '../models';
 import {coupling} from '../models';
 import {dependency} from '../models';
 import {instability} from '../models';
-import {comments} from '../models';
 import {gocyclo} from '../models';
+import {comments} from '../models';
 import {interfaces} from '../models';
 import {loc} from '../models';
 import {types} from '../models';
@@ -20,6 +20,8 @@ export function GetDependencyCoupling(arg1:project.ProjectInfo,arg2:string):Prom
 export function GetDependencyGraph(arg1:project.ProjectInfo):Promise<dependency.ModuleDependencyGraph>;
 
 export function GetInstability(arg1:project.ProjectInfo):Promise<Array<instability.PackageInstability>>;
+
+export function GetMetricsCognitiveComplexity(arg1:project.ProjectInfo):Promise<gocyclo.GoCycloOutput>;
 
 export function GetMetricsComments(arg1:project.ProjectInfo):Promise<comments.CommentsMetrics>;
 

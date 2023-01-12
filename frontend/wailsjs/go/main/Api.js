@@ -18,6 +18,10 @@ export function GetInstability(arg1) {
   return window['go']['main']['Api']['GetInstability'](arg1);
 }
 
+export function GetMetricsCognitiveComplexity(arg1) {
+  return window['go']['main']['Api']['GetMetricsCognitiveComplexity'](arg1);
+}
+
 export function GetMetricsComments(arg1) {
   return window['go']['main']['Api']['GetMetricsComments'](arg1);
 }
