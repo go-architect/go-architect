@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import { goToUrl } from "../../../../utils/goto";
+
 const props = defineProps(['data', 'error'])
 </script>
 
@@ -6,6 +8,12 @@ const props = defineProps(['data', 'error'])
   <div class="card card-primary card-outline">
     <div class="card-header">
       <h3 class="card-title">Functions Cognitive Complexity</h3>
+      <div class="text-right">
+        <div class="btn btn-sm btn-default action" title="About Cognitive Complexity"
+             v-on:click="goToUrl('https://github.com/uudashr/gocognit')">
+          <i class="fa fa-question-circle" />
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <div v-if="props.data == undefined && props.error == undefined" class="overlay-wrapper">

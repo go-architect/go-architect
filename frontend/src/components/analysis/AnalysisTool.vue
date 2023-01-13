@@ -52,6 +52,8 @@ export default {
 }
 
 .tool-image {
+  width: 120px !important;
+  height: 120px !important;
   border: 1px solid #6c757d;
 }
 </style>

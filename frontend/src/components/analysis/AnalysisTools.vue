@@ -8,17 +8,24 @@ export default {
     return {
       tools: [
         {
+          title: "Project Metrics",
+          description: "This tool displays different metrics as Lines of code, project complexity and interfaces analysis.",
+          image: "/images/metrics.png",
+          href: "/metrics",
+          beta: false,
+          soon: false
+        },
+        {
           title: "Dependencies Graph",
-          description: "",
+          description: "A dependency graph is a directed graph representing dependencies between packages in the Go Project.",
           image: "/images/dependency-graph.png",
-//          image: "/src/components/analysis/assets/dependency-graph.png",
           href: "/dg",
           beta: false,
           soon: false
         },
         {
           title: "Dependency Structure Matrix",
-          description: "",
+          description: "A DSM is a simple and visual representation of a system in the form of a square matrix, displaying dependency relations between packages.",
           image: "/images/dsm.png",
           href: "/dsm",
           beta: false,
@@ -26,9 +33,9 @@ export default {
         },
         {
           title: "Instability & Abtractness",
-          description: "",
+          description: "This tool helps understanding the balance between packages that are open to extension and packages that are easy to modify.",
           image: "/images/abstractness.png",
-          href:"/it",
+          href:"/instability",
           beta: false,
           soon: false,
           onclick: () => {
@@ -38,9 +45,17 @@ export default {
         {
           title: "Dependency Coupling",
           description: "This tool is useful when you want to know the coupling level of your whole project related to a specific dependency",
-          image: "/images/abstractness.png",
-          href: "/dc",
+          image: "/images/coupling.png",
+          href: "/coupling",
           beta: false,
+          soon: false
+        },
+        {
+          title: "Version Control Analysis",
+          description: "WIP",
+          image: "/images/vcs.png",
+          href: "/vcs",
+          beta: true,
           soon: false
         },
       ]

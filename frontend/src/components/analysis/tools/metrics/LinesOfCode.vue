@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import {reactive, watch} from "vue";
-import {loc} from "../../../../wailsjs/go/models";
+import {loc} from "../../../../../wailsjs/go/models";
 
 const props = defineProps(['data'])
 const data = reactive({

@@ -6,11 +6,9 @@ import (
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/menu"
-	"github.com/wailsapp/wails/v2/pkg/menu/keys"
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
-	"github.com/wailsapp/wails/v2/pkg/runtime"
 	"os"
 	"path"
 	goRuntime "runtime"
@@ -31,13 +29,10 @@ func main() {
 	app = NewApp()
 	api = NewApi()
 
-	AppMenu := menu.NewMenu()
-	FileMenu := AppMenu.AddSubmenu("File")
-	FileMenu.AddText("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
-		runtime.Quit(app.ctx)
-	})
+	applicationMenu := menu.NewMenu()
+	applicationMenu.Append(menu.AppMenu())
 	if goRuntime.GOOS == "darwin" {
-		AppMenu.Append(menu.EditMenu()) // on macos platform, we should append EditMenu to enable Cmd+C,Cmd+V,Cmd+Z... shortcut
+		applicationMenu.Append(menu.EditMenu()) // on macos platform, we should append EditMenu to enable Cmd+C,Cmd+V,Cmd+Z... shortcut
 	}
 
 	logFile := os.Getenv("HOME") + "/.goarchitect/goarchitect.log"
@@ -57,7 +52,7 @@ func main() {
 			app,
 			api,
 		},
-		Menu:               AppMenu,
+		Menu:               applicationMenu,
 		Logger:             fileLogger,
 		LogLevel:           logger.DEBUG,
 		LogLevelProduction: logger.ERROR,
@@ -65,7 +60,6 @@ func main() {
 			About: &mac.AboutInfo{
 				Title:   "My Application",
 				Message: "© 2021 Me",
-				Icon:    icon,
 			},
 		},
 	})

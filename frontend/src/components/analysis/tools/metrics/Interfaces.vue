@@ -20,10 +20,10 @@ const props = defineProps(['data'])
           <b>Average Methods</b>
           <div class="float-right">{{ data?.average_methods.toLocaleString('en-us', {}) }}</div>
         </li>
-        <li v-if="(data.min_methods.length + data.max_methods.length) == 0" class="list-group-item">
+        <li v-if="data!=null && (data.min_methods?.length + data.max_methods?.length) == 0" class="list-group-item">
           <b>The Go Project does not contain interfaces</b>
         </li>
-        <li v-if="data.min_methods.length > 0" class="list-group-item">
+        <li v-if="data!=null && data.min_methods?.length > 0" class="list-group-item">
           <b>Interfaces with Min number of methods</b>
           <div class="float-right">{{ data.min_methods[0].methods.toLocaleString('en-us', {}) }}</div>
           <div>
@@ -37,7 +37,7 @@ const props = defineProps(['data'])
             </ul>
           </div>
         </li>
-        <li v-if="data.max_methods.length > 0" class="list-group-item">
+        <li v-if="data.max_methods?.length > 0" class="list-group-item">
           <b>Interfaces with Max number of methods</b>
           <div class="float-right">{{ data.max_methods[0].methods.toLocaleString('en-us', {}) }}</div>
           <div>

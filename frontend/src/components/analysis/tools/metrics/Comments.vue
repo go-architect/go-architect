@@ -36,6 +36,7 @@ const props = defineProps(['data'])
   padding: .25rem .25rem
 }
 .ratio {
+  font-size: 12px;
   margin-left: 20px;
   margin-top: 10px;
 }

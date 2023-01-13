@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/fdaines/go-architect-lib v1.0.1
+	github.com/go-git/go-git/v5 v5.5.1
 	github.com/wailsapp/wails/v2 v2.2.0
 	golang.org/x/sys v0.3.0
 )
@@ -17,7 +18,6 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/go-git/gcfg v1.5.0 // indirect
 	github.com/go-git/go-billy/v5 v5.3.1 // indirect
-	github.com/go-git/go-git/v5 v5.5.1 // indirect
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/imdario/mergo v0.3.13 // indirect

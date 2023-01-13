@@ -14,9 +14,11 @@ import (
 	"github.com/fdaines/go-architect-lib/project"
 	"github.com/fdaines/go-architect-lib/repository"
 	localDSM "github.com/fdaines/go-architect/backend/dsm"
+	"github.com/fdaines/go-architect/backend/git"
 	"github.com/fdaines/go-architect/backend/gocyclo"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	exec "golang.org/x/sys/execabs"
+	"time"
 )
 
 type Api struct {
@@ -140,4 +142,10 @@ func (a *Api) GetMetricsCognitiveComplexity(project *project.ProjectInfo) (*gocy
 		return nil, fmt.Errorf(errorMessage)
 	}
 	return gocyclo.MapToGoCycloModel(string(bytes)), nil
+}
+
+func (a *Api) GetVCSAnalysisInfo(project *project.ProjectInfo, monthsFromNow int) *git.VCSAnalysisInfo {
+	since := time.Now().AddDate(0, -1*monthsFromNow, 0)
+	r, _ := git.LoadRepositoryTeamCohesion(project.Path, &since)
+	return r
 }

@@ -11,6 +11,7 @@ import {interfaces} from '../models';
 import {loc} from '../models';
 import {types} from '../models';
 import {repository} from '../models';
+import {git} from '../models';
 import {context} from '../models';
 
 export function GetDSM(arg1:project.ProjectInfo):Promise<dsm.DependencyStructureMatrix>;
@@ -36,5 +37,7 @@ export function GetMetricsTypes(arg1:project.ProjectInfo):Promise<types.ProjectT
 export function GetProjectInfo(arg1:string):Promise<project.ProjectInfo>;
 
 export function GetRepositoryInfo(arg1:string):Promise<repository.RepositoryInfo>;
+
+export function GetVCSAnalysisInfo(arg1:project.ProjectInfo,arg2:number):Promise<git.VCSAnalysisInfo>;
 
 export function SetContext(arg1:context.Context):Promise<void>;

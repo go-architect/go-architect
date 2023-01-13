@@ -11,6 +11,7 @@ export default {
   components: {ProjectList, Welcome},
   methods: {
     handleSelectedProject(vm: any, project:any) {
+      console.log("project", project)
       saveSelectedProject(project)
       vm.$router.push("/analysis")
     }

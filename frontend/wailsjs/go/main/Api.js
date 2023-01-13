@@ -50,6 +50,10 @@ export function GetRepositoryInfo(arg1) {
   return window['go']['main']['Api']['GetRepositoryInfo'](arg1);
 }
 
+export function GetVCSAnalysisInfo(arg1, arg2) {
+  return window['go']['main']['Api']['GetVCSAnalysisInfo'](arg1, arg2);
+}
+
 export function SetContext(arg1) {
   return window['go']['main']['Api']['SetContext'](arg1);
 }

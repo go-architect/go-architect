@@ -19,3 +19,5 @@ build/bin
 frontend/dist/assets
 frontend/dist/images
 frontend/node_modules
+
+.DS_Store

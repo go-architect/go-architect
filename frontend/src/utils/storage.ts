@@ -8,6 +8,15 @@ export const getSelectedProject = () => {
 
 export const saveSelectedProject = (project: any) => {
     localStorage.setItem("project", JSON.stringify(project))
+    const pl = getProjectsList()
+    if(pl!=null){
+        for(let i=0;i<pl.length;i++){
+            if(pl[i].id === project.id){
+                pl[i].organization_packages = project.organization_packages
+            }
+        }
+    }
+    localStorage.setItem("projects", JSON.stringify(pl))
 }
 
 export const removeSelectedProject = () => {

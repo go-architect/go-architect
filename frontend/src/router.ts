@@ -5,6 +5,8 @@ import DependencyStructureMatrix from './components/analysis/tools/dsm/Dependenc
 import DependencyGraph from './components/analysis/tools/dependency-graph/DependencyGraph.vue'
 import DependencyCoupling from './components/analysis/tools/dependency-coupling/DependencyCoupling.vue'
 import InstabilityTool from './components/analysis/tools/instability/InstabilityTool.vue'
+import ProjectMetrics from './components/analysis/tools/metrics/ProjectMetrics.vue'
+import VCSAnalysisTool from './components/analysis/tools/vcs/VersionControlSystemTool.vue'
 
 export const router = createRouter({
     history: createWebHashHistory(),
@@ -25,6 +27,11 @@ export const router = createRouter({
             path: '/analysis'
         },
         {
+            name: 'ProjectMetrics',
+            component: ProjectMetrics,
+            path: '/metrics'
+        },
+        {
             name: 'DependencyStructureMatrix',
             component: DependencyStructureMatrix,
             path: '/dsm'
@@ -37,12 +44,17 @@ export const router = createRouter({
         {
             name: 'DependencyCoupling',
             component: DependencyCoupling,
-            path: '/dc'
+            path: '/coupling'
         },
         {
             name: 'InstabilityTool',
             component: InstabilityTool,
-            path: '/it'
+            path: '/instability'
+        },
+        {
+            name: 'VCSAnalysisTool',
+            component: VCSAnalysisTool,
+            path: '/vcs'
         }
     ]
 })

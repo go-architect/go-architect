@@ -4,7 +4,6 @@ import {BrowserOpenURL} from '../../wailsjs/runtime'
 export default {
   methods: {
     goTo(url: string) {
-      console.log("Select Url: " + url)
       BrowserOpenURL(url)
     }
   }
