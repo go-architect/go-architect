@@ -17,11 +17,11 @@
       </div>
       <div v-else>
         <div class="row">
-          <div class="col-8">
+          <div class="col-9">
             <changes-summary :data="getPathChangesSummaryData" :contributors="vcs.AuthorsInfo.AuthorDetails.length" :colors="getAssignedColorsMap" />
             <changes-summary :data="getFileChangesSummaryData" :contributors="vcs.AuthorsInfo.AuthorDetails.length" :colors="getAssignedColorsMap" />
           </div>
-          <div class="col-4">
+          <div class="col-3">
             <contributors :data="vcs.AuthorsInfo" :colors="getAssignedColorsMap" />
           </div>
         </div>
@@ -51,12 +51,14 @@ export default defineComponent({
     getPathChangesSummaryData(){
       return {
         title: "Changes Summary by Path",
+        kind: "Path",
         modifications: this.vcs.ModificationsInfo.PathModifications
       }
     },
     getFileChangesSummaryData(){
       return {
         title: "Changes Summary by File",
+        kind: "File",
         modifications: this.vcs.ModificationsInfo.FileModifications
       }
     },
@@ -67,16 +69,10 @@ export default defineComponent({
   },
   async mounted() {
     const project = getSelectedProject()
-    const result = await GetVCSAnalysisInfo(project, 6)
-    console.log(result)
-    this.vcs = result
+    this.vcs = await GetVCSAnalysisInfo(project, 6)
   }
 })
 </script>
 
 <style scoped>
-.vcs {
-  width: unset;
-  font-size: 8px;
-}
 </style>

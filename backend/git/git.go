@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"sort"
 	"strings"
 	"time"
 )
@@ -23,7 +24,6 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 		return nil, err
 	}
 
-	fmt.Printf("Repo: %+v\n", repo)
 	log, _ := repo.Log(&git.LogOptions{
 		Order: git.LogOrderCommitterTime,
 		Since: since,
@@ -33,7 +33,6 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 
 		s, _ := c.Stats()
 		for _, fs := range s {
-			fmt.Printf("LogDetail: (%s)[%s](%v/%v)\n", c.Author.Name, fs.Name, fs.Deletion, fs.Addition)
 			filePath := "./"
 			if strings.Contains(fs.Name, "/") {
 				lastIndex := strings.LastIndex(fs.Name, "/")
@@ -77,10 +76,8 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 	})
 
 	for _, modValue := range pathModifications {
-		fmt.Printf("PathModification: %+v\n", modValue)
 		summary := make(map[string]ContributorSummary)
 		for _, a := range modValue.AuthorsSummary {
-			fmt.Printf("Summarize author data: %+v\n", a)
 			entry, ok := summary[a.Name]
 			if ok {
 				entry.Modifications += a.Modifications
@@ -100,10 +97,8 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 		result.ModificationsInfo.PathModifications = append(result.ModificationsInfo.PathModifications, modValue)
 	}
 	for _, modValue := range fileModifications {
-		fmt.Printf("FileModification: %+v\n", modValue)
 		summary := make(map[string]ContributorSummary)
 		for _, a := range modValue.AuthorsSummary {
-			fmt.Printf("Summarize author data: %+v\n", a)
 			entry, ok := summary[a.Name]
 			if ok {
 				entry.Modifications += a.Modifications
@@ -120,7 +115,9 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 			modValue.AuthorsSummary = append(modValue.AuthorsSummary, cs)
 			modValue.TotalModifications += cs.Modifications
 		}
-		result.ModificationsInfo.FileModifications = append(result.ModificationsInfo.FileModifications, modValue)
+		if modValue.Source != "" {
+			result.ModificationsInfo.FileModifications = append(result.ModificationsInfo.FileModifications, modValue)
+		}
 	}
 
 	var numAuthors, numCommits, numModifications int
@@ -137,5 +134,16 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 		AuthorDetails:      authorsDetails,
 	}
 
+	sort.Sort(SortModificationsSliceByAuthors(result.ModificationsInfo.FileModifications))
+	sort.Sort(SortModificationsSliceByAuthors(result.ModificationsInfo.PathModifications))
+
 	return result, nil
 }
+
+type SortModificationsSliceByAuthors []ModificationsInfo
+
+func (a SortModificationsSliceByAuthors) Len() int { return len(a) }
+func (a SortModificationsSliceByAuthors) Less(i, j int) bool {
+	return len(a[i].AuthorsSummary) < len(a[j].AuthorsSummary)
+}
+func (a SortModificationsSliceByAuthors) Swap(i, j int) { a[i], a[j] = a[j], a[i] }

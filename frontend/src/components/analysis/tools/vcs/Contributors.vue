@@ -5,7 +5,7 @@
     </div>
     <div class="card-body">
       <ul class="list-group list-group-unbordered mb-3">
-        <li v-for="author in sortedContributors()" class="list-group-item">
+        <li v-for="author in sortedContributors()" class="list-group-item contributor">
           <i class="fa-solid fa-circle author-color" :style="resolveColor(author.Name)"></i>
           <b>{{ author.Name }}</b>
           <div class="float-right">{{ (100 * author.ModifiedLines / props.data.TotalModifications).toLocaleString('en-us', {}) }}%</div>
@@ -31,7 +31,13 @@ function resolveColor(author: string) {
 </script>
 
 <style scoped>
+.contributor {
+  font-size: 14px;
+}
 .author-color {
   margin-right: 10px;
+}
+.ratio {
+  font-size: 12px;
 }
 </style>
