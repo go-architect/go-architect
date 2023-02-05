@@ -52,10 +52,10 @@ export default {
         },
         {
           title: "Version Control Analysis",
-          description: "WIP",
+          description: "This tool helps you to gather information about how your team uses your version control system.",
           image: "/images/vcs.png",
           href: "/vcs",
-          beta: true,
+          beta: false,
           soon: false
         },
       ]

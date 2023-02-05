@@ -9,7 +9,7 @@
           <thead>
             <tr>
               <th style="width: 30px">#</th>
-              <th>Path or File</th>
+              <th>{{ props.data.kind }}</th>
               <th style="width: 90px">Status</th>
               <th style="width: 90px">Changes</th>
               <th style="width: 550px">Contributors</th>
@@ -47,7 +47,6 @@ function resolveStyle(summary: any, totalModifications: number) {
 }
 
 function resolveStatus(authors: any) {
-  console.log("resolveStatus", authors)
   if(authors.length === 1)
     return "badge bg-danger"
 
