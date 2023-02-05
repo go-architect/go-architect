@@ -18,7 +18,6 @@
 
 <script lang="ts" setup>
 const props = defineProps(['data','colors'])
-console.log(props.colors)
 
 function sortedContributors() {
   props.data.AuthorDetails.sort((a: any, b: any) => b.ModifiedLines - a.ModifiedLines)

@@ -47,7 +47,6 @@ function resolveStyle(summary: any, totalModifications: number) {
 }
 
 function resolveStatus(authors: any) {
-  console.log("resolveStatus", authors)
   if(authors.length === 1)
     return "badge bg-danger"
 
