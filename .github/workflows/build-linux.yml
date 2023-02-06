@@ -24,4 +24,4 @@ jobs:
         run: wails version
 
       - name: Build Go Architect
-        run: wails build -platform==linux,windows,darwin
+        run: wails build -platform==linux/amd64,linux/arm64,windows/amd64,windows/arm64,darwin/universal,darwin/amd64,darwin/arm64
