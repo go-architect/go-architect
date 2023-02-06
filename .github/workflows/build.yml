@@ -25,32 +25,10 @@ jobs:
         run: wails version
 
       - name: Build Go Architect
-        run: wails build -platform=windows/amd64,windows/arm64,darwin/universal,darwin/amd64,darwin/arm64
+        run: wails build -platform=darwin/arm64
 
-  windows:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
+      - name: Install Create-DMG
+        run: brew install create-dmg
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: 1.19
-
-      - name: Load Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-
-      - name: Check Wails Version
-        run: wails version
-
-      - name: Build Go Architect
-        run: wails build -platform=windows/amd64,windows/arm64,darwin/universal,darwin/amd64,darwin/arm64
-
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Windows-ARM64.exe
-          path: /home/runner/work/go-architect/go-architect/build/bin/go-architect-arm64.exe
-      - uses: actions/upload-artifact@v2
-        with:
-          name: Windows-AMD64.exe
-          path: /home/runner/work/go-architect/go-architect/build/bin/go-architect-amd64.exe
+      - name: Create Go Architect DMG
+        run: create-dmg --volname "Application Installer" --hide-extension "Application.app" "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
