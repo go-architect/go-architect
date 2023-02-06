@@ -29,8 +29,8 @@ jobs:
       - uses: actions/upload-artifact@v2
         with:
           name: Windows-ARM64.exe
-          path: go-architect/build/bin/go-architect-arm64.exe
+          path: /home/runner/work/go-architect/go-architect/build/bin/go-architect-arm64.exe
       - uses: actions/upload-artifact@v2
         with:
           name: Windows-AMD64.exe
-          path: go-architect/build/bin/go-architect-amd64.exe
+          path: /home/runner/work/go-architect/go-architect/build/bin/go-architect-amd64.exe
