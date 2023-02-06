@@ -28,5 +28,5 @@ export const getProjectsList = () => {
     if(pl != null){
         return JSON.parse(pl)
     }
-    return null
+    return []
 }
