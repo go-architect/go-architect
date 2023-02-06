@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing/object"
+	"os"
 	"sort"
 	"strings"
 	"time"
@@ -33,9 +34,9 @@ func LoadRepositoryTeamCohesion(path string, since *time.Time) (*VCSAnalysisInfo
 
 		s, _ := c.Stats()
 		for _, fs := range s {
-			filePath := "./"
-			if strings.Contains(fs.Name, "/") {
-				lastIndex := strings.LastIndex(fs.Name, "/")
+			filePath := fmt.Sprintf(".%s", string(os.PathSeparator))
+			if strings.Contains(fs.Name, string(os.PathSeparator)) {
+				lastIndex := strings.LastIndex(fs.Name, string(os.PathSeparator))
 				filePath = fs.Name[0 : lastIndex+1]
 			}
 			entry, ok := pathModifications[filePath]
