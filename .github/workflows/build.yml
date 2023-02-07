@@ -31,4 +31,4 @@ jobs:
         run: brew install create-dmg
 
       - name: Create Go Architect DMG
-        run: create-dmg --volname "Application Installer" --hide-extension "Application.app" "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
+        run: create-dmg "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
