@@ -11,6 +11,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"os"
 	"path"
+	"path/filepath"
 	goRuntime "runtime"
 )
 
@@ -35,7 +36,7 @@ func main() {
 		applicationMenu.Append(menu.EditMenu()) // on macos platform, we should append EditMenu to enable Cmd+C,Cmd+V,Cmd+Z... shortcut
 	}
 
-	logFile := os.Getenv("HOME") + "/.goarchitect/goarchitect.log"
+	logFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/goarchitect.log")
 	checkForLoggingFile(logFile)
 	fileLogger := logger.NewFileLogger(logFile)
 
@@ -55,11 +56,11 @@ func main() {
 		Menu:               applicationMenu,
 		Logger:             fileLogger,
 		LogLevel:           logger.DEBUG,
-		LogLevelProduction: logger.ERROR,
+		LogLevelProduction: logger.INFO,
 		Mac: &mac.Options{
 			About: &mac.AboutInfo{
-				Title:   "My Application",
-				Message: "© 2021 Me",
+				Title:   "Go Architect",
+				Message: "© 2022 - Francisco Daines",
 			},
 		},
 	})
@@ -88,4 +89,5 @@ func checkForLoggingFile(filename string) {
 func onStartup(ctx context.Context) {
 	app.SetContext(ctx)
 	api.SetContext(ctx)
+	app.CheckEnvironmentPath()
 }

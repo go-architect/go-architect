@@ -18,14 +18,11 @@ export default defineComponent({
   },
   created() {
     const router = useRouter()
-    console.log("App.vue created", data.selectedProject)
     const currentProject = getSelectedProject()
     if (currentProject!=null){
-      console.log("selected project in localstorage: ", currentProject)
       this.selectedProject = currentProject
       router.push("/analysis")
     } else {
-      console.log("There is no selected project in localstorage")
       router.push("/projects")
     }
   }

@@ -5,8 +5,9 @@ go 1.18
 require (
 	github.com/fdaines/go-architect-lib v1.0.1
 	github.com/go-git/go-git/v5 v5.5.1
-	github.com/wailsapp/wails/v2 v2.2.0
+	github.com/wailsapp/wails/v2 v2.3.1
 	golang.org/x/sys v0.3.0
+	golang.org/x/tools v0.4.0
 )
 
 require (
@@ -36,7 +37,7 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 	github.com/samber/lo v1.27.1 // indirect
-	github.com/sergi/go-diff v1.1.0 // indirect
+	github.com/sergi/go-diff v1.2.0 // indirect
 	github.com/skeema/knownhosts v1.1.0 // indirect
 	github.com/tkrajina/go-reflector v0.5.5 // indirect
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
@@ -48,8 +49,7 @@ require (
 	golang.org/x/mod v0.7.0 // indirect
 	golang.org/x/net v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect
-	golang.org/x/tools v0.4.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )
 
-// replace github.com/wailsapp/wails/v2 v2.2.0 => /Users/fdaines/go/pkg/mod
+// replace github.com/wailsapp/wails/v2 v2.3.1 => /Users/fdaines/go/pkg/mod
