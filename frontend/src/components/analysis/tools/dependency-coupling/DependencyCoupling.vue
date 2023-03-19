@@ -11,16 +11,18 @@ export default defineComponent({
   components: {PackageSelection, CouplingDetails},
   data() {
     return {
+      loading: false,
       project: undefined as project.ProjectInfo | undefined,
       result: undefined as coupling.DependencyCoupling | undefined
     }
   },
   methods: {
     async runDependencyCoupling({dependency}: any) {
+      this.result = undefined
+      this.loading = true
       if(this.project!=undefined){
-        console.log("Project", this.project)
         this.result = await GetDependencyCoupling(this.project, dependency)
-        console.log(this.result)
+        this.loading = false
       }
     }
   },
@@ -45,6 +47,11 @@ export default defineComponent({
         <package-selection @run="runDependencyCoupling" />
       </div>
       <div>
+        <div v-if="loading" class="overlay">
+          <i class="fas fa-3x fa-sync-alt fa-spin"></i>
+          <div class="text-bold pt-2">Analyzing coupling...</div>
+        </div>
+
         <coupling-details v-if="result !== undefined" :result=result />
       </div>
     </div>

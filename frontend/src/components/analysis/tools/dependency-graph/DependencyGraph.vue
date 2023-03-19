@@ -65,7 +65,14 @@ export default defineComponent( {
           },
           selectable: true,
           label: {
-            visible: (node: any) => !!node.label,
+            visible: true,
+            fontFamily: undefined,
+            fontSize: 11,
+            lineHeight: 1.1,
+            color: "#000000",
+            margin: 4,
+            direction: "south",
+            text: "name",
           },
           focusring: {
             color: "darkgray",
@@ -92,8 +99,6 @@ export default defineComponent( {
       this.mapNodes(dg)
       this.mapEdges(dg)
       this.layout("TB")
-      console.log("nodes", this.nodes)
-      console.log("layouts", this.layouts)
     },
     mapEdges(dg: dependency.ModuleDependencyGraph) {
       for(let origin in dg.relations){
@@ -175,10 +180,14 @@ export default defineComponent( {
     }
   },
   async mounted() {
+    this.nodes = nodes
+    this.edges = edges
+    this.layouts = layouts
+    this.nodesSize = 0
+
     this.project = getSelectedProject()
     if(this.project !== undefined){
       const dg = await GetDependencyGraph(this.project)
-      console.log(dg)
       this.mapToNetworkGraph(dg)
     }
   }

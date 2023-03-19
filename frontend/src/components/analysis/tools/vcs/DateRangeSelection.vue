@@ -16,9 +16,15 @@ import {defineComponent} from "vue";
 export default defineComponent({
   name: "DateRangeSelection",
   emits: ["run"],
+  props: {
+    selectedRange: {
+      required: true,
+      type: Number
+    }
+  },
   data() {
     return {
-      range: 6,
+      range: 0,
     }
   },
   methods: {
@@ -28,6 +34,9 @@ export default defineComponent({
     analyzeDependency(vm: any) {
       vm.$emit("run", { range: this.range })
     }
+  },
+  mounted() {
+    this.range = this.selectedRange
   }
 })
 </script>
