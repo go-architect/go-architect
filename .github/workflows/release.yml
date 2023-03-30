@@ -35,7 +35,7 @@ jobs:
       - name: Save DMG Image in workspace
         uses: actions/upload-artifact@v2
         with:
-          name: dmg-image
+          name: "Go-Architect.dmg"
           path: "Go-Architect.dmg"
 
   changelog:
@@ -53,7 +53,7 @@ jobs:
       - name: Save Release Notes in workspace
         uses: actions/upload-artifact@v2
         with:
-          name: release-notes
+          name: ${{ github.workspace }}-CHANGELOG.txt
           path: ${{ github.workspace }}-CHANGELOG.txt
 
   release:
@@ -68,11 +68,13 @@ jobs:
       - name: Restore DMG Image
         uses: actions/download-artifact@v2
         with:
-          name: dmg-image
+          name: "Go-Architect.dmg"
       - name: Restore Release Notes
         uses: actions/download-artifact@v2
         with:
-          name: release-notes
+          name: ${{ github.workspace }}-CHANGELOG.txt
+      - name: Check Release Files
+        run: ls -la /home/runner/work/go-architect/go-architect
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
