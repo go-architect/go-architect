@@ -49,12 +49,12 @@ jobs:
       - name: Get tags
         run: git fetch --tags origin
       - name: Release Notes
-        run: git log $(git describe --tags --abbrev=0 ${{github.ref_name}}^)..HEAD --pretty=format:'%h - %s' > ${{ github.workspace }}-CHANGELOG.txt
+        run: git log $(git describe --tags --abbrev=0 ${{github.ref_name}}^)..HEAD --pretty=format:'%h - %s' > CHANGELOG.txt
       - name: Save Release Notes in workspace
         uses: actions/upload-artifact@v2
         with:
-          name: ${{ github.workspace }}-CHANGELOG.txt
-          path: ${{ github.workspace }}-CHANGELOG.txt
+          name: CHANGELOG.txt
+          path: CHANGELOG.txt
 
   release:
     needs: [build-macos, changelog]
@@ -72,12 +72,12 @@ jobs:
       - name: Restore Release Notes
         uses: actions/download-artifact@v2
         with:
-          name: ${{ github.workspace }}-CHANGELOG.txt
+          name: CHANGELOG.txt
       - name: Check Release Files
         run: ls -la /home/runner/work/go-architect/go-architect
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
-          body_path: ${{ github.workspace }}-CHANGELOG.txt
+          body_path: CHANGELOG.txt
           files: |
             Go-Architect.dmg
