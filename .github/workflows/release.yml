@@ -10,10 +10,10 @@ jobs:
     runs-on: macOS-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: 1.19
 
@@ -33,9 +33,9 @@ jobs:
         run: create-dmg "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
       - name: Save DMG Image in workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: "Go-Architect.dmg"
+          name: "Go-Architect-${{github.ref_name}}.dmg"
           path: "Go-Architect.dmg"
 
   changelog:
@@ -51,7 +51,7 @@ jobs:
       - name: Release Notes
         run: git log $(git describe --tags --abbrev=0 ${{github.ref_name}}^)..HEAD --pretty=format:'%h - %s' > CHANGELOG.txt
       - name: Save Release Notes in workspace
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: CHANGELOG.txt
           path: CHANGELOG.txt
@@ -66,11 +66,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Restore DMG Image
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
-          name: "Go-Architect.dmg"
+          name: "Go-Architect-${{github.ref_name}}.dmg"
       - name: Restore Release Notes
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: CHANGELOG.txt
       - name: Check Release Files
@@ -80,4 +80,4 @@ jobs:
         with:
           body_path: CHANGELOG.txt
           files: |
-            Go-Architect.dmg
+            Go-Architect-${{github.ref_name}}.dmg
