@@ -32,6 +32,12 @@ jobs:
       - name: Create Go Architect DMG
         run: create-dmg "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
+      - name: Save DMG Image in workspace
+        uses: actions/upload-artifact@v2
+        with:
+          name: dmg-image
+          path: "Go-Architect.dmg"
+
   changelog:
     needs: build-macos
     runs-on: ubuntu-latest
@@ -44,6 +50,11 @@ jobs:
         run: git fetch --tags origin
       - name: Release Notes
         run: git log $(git describe --tags --abbrev=0 ${{github.ref_name}}^)..HEAD --pretty=format:'%h - %s' > ${{ github.workspace }}-CHANGELOG.txt
+      - name: Save Release Notes in workspace
+        uses: actions/upload-artifact@v2
+        with:
+          name: release-notes
+          path: ${{ github.workspace }}-CHANGELOG.txt
 
   release:
     needs: [build-macos, changelog]
@@ -54,6 +65,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Restore DMG Image
+        uses: actions/download-artifact@v2
+        with:
+          name: dmg-image
+      - name: Restore Release Notes
+        uses: actions/download-artifact@v2
+        with:
+          name: release-notes
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
