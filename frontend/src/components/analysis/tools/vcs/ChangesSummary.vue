@@ -24,7 +24,7 @@
                   {{resolveStatusText(m.AuthorsSummary)}}
                 </span>
               </td>
-              <td class="text-center">{{ m.TotalModifications }}</td>
+              <td class="text-center">{{ m.TotalModifications.toLocaleString('en-us', {}) }}</td>
               <td>
                 <div v-for="summary in sorted(m.AuthorsSummary)" :style="resolveStyle(summary, m.TotalModifications)"></div>
               </td>

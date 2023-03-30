@@ -18,7 +18,7 @@
       <div v-else>
         <div class="row">
           <div class="col-12">
-            <date-range-selection @run="updateDateRange" />
+            <date-range-selection @run="updateDateRange" :selected-range="months" />
           </div>
         </div>
         <div v-if="vcs.AuthorsInfo.TotalCommits === 0" class="row">
@@ -80,7 +80,12 @@ export default defineComponent({
     }
   },
   methods: {
-    async updateDateRange({range}: any) {
+    updateDateRange({range}: any) {
+      this.vcs = undefined
+      this.months = range
+      this.analyzeVcs({range})
+    },
+    async analyzeVcs({range}: any) {
       const project = getSelectedProject()
       this.months = range
       this.vcs = await GetVCSAnalysisInfo(project, this.months)
@@ -88,6 +93,7 @@ export default defineComponent({
   },
   async mounted() {
     const project = getSelectedProject()
+    this.months = 6
     this.vcs = await GetVCSAnalysisInfo(project, this.months)
   }
 })

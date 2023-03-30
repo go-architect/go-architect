@@ -1,0 +1,60 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-macos:
+    runs-on: macOS-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.19
+
+      - name: Load Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Check Wails Version
+        run: wails version
+
+      - name: Build Go Architect
+        run: wails build -platform=darwin/arm64
+
+      - name: Install Create-DMG
+        run: brew install create-dmg
+
+      - name: Create Go Architect DMG
+        run: create-dmg "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
+
+  changelog:
+    needs: build-macos
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Get tags
+        run: git fetch --tags origin
+      - name: Release Notes
+        run: git log $(git describe --tags --abbrev=0 ${{github.ref_name}}^)..HEAD --pretty=format:'%h - %s' > ${{ github.workspace }}-CHANGELOG.txt
+
+  release:
+    needs: [build-macos, changelog]
+    permissions:
+      contents: write
+      discussions: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: ${{ github.workspace }}-CHANGELOG.txt

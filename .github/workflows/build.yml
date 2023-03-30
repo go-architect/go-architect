@@ -6,29 +6,16 @@ on:
     branches: [ setup-custom-environment-path ]
 
 jobs:
-
-  macos:
+  test:
     runs-on: macOS-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v2
 
       - name: Set up Go
-        uses: actions/setup-go@v2
+        uses: actions/setup-go@v4
         with:
           go-version: 1.19
 
-      - name: Load Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-
-      - name: Check Wails Version
-        run: wails version
-
-      - name: Build Go Architect
-        run: wails build -platform=darwin/arm64
-
-      - name: Install Create-DMG
-        run: brew install create-dmg
-
-      - name: Create Go Architect DMG
-        run: create-dmg "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
+      - name: Test
+        run: go test ./...

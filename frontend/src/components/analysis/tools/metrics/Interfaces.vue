@@ -15,13 +15,13 @@ const props = defineProps(['data'])
         </div>
         .......
       </div>
+      <div v-else-if="data.min_methods?.length == undefined && data.max_methods?.length == undefined" class="overlay-wrapper">
+        <b>The Go Project does not contain interfaces.</b>
+      </div>
       <ul v-else class="list-group list-group-unbordered mb-3">
         <li class="list-group-item">
           <b>Average Methods</b>
           <div class="float-right">{{ data?.average_methods.toLocaleString('en-us', {}) }}</div>
-        </li>
-        <li v-if="data!=null && (data.min_methods?.length + data.max_methods?.length) == 0" class="list-group-item">
-          <b>The Go Project does not contain interfaces</b>
         </li>
         <li v-if="data!=null && data.min_methods?.length > 0" class="list-group-item">
           <b>Interfaces with Min number of methods</b>

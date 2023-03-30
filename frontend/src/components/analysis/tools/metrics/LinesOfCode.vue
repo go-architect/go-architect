@@ -38,7 +38,7 @@ watch(() => props.data, async (newVal: loc.ProjectLOC) => {
         </li>
         <li class="list-group-item">
           <b>Longest Package</b>
-          <div class="float-right">{{ data.longestPackage?.loc }}</div>
+          <div class="float-right">{{ data.longestPackage?.loc.toLocaleString('en-us', {}) }}</div>
           <div>
             <ul class="list-unstyled">
               <li class="details">
@@ -49,7 +49,7 @@ watch(() => props.data, async (newVal: loc.ProjectLOC) => {
         </li>
         <li class="list-group-item">
           <b>Longest File</b>
-          <div class="float-right">{{ data.longestFile?.loc }}</div>
+          <div class="float-right">{{ data.longestFile?.loc.toLocaleString('en-us', {}) }}</div>
           <div>
             <ul class="list-unstyled">
               <li class="details">

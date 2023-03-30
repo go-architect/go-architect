@@ -45,8 +45,8 @@ func (a *App) CheckEnvironmentPath() bool {
 		if err != nil {
 			fmt.Print(err)
 		} else {
-			customPath := fmt.Sprintf("%s%s", strings.TrimSuffix(string(b), "\n"), os.PathListSeparator)
-			os.Setenv("PATH", customPath+os.Getenv("PATH"))
+			customPath := strings.TrimSuffix(string(b), "\n")
+			os.Setenv("PATH", customPath+":"+os.Getenv("PATH"))
 			runtime.LogInfof(a.ctx, "CheckEnvironmentPath - NewPath: %s", os.Getenv("PATH"))
 		}
 	}

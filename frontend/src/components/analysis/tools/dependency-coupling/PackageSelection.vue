@@ -26,7 +26,7 @@ export default defineComponent({
       this.dependency = $event.target.value
     },
     analyzeDependency(vm: any) {
-      console.log("analyzeDependency", this.dependency)
+      this.dependency = this.dependency.toLowerCase()
       vm.$emit("run", { dependency: this.dependency })
     }
   }
