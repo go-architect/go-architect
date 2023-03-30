@@ -1,9 +1,9 @@
 name: Build Distribution for Linux
 on:
   push:
-    branches: [ setup-custom-environment-path ]
+    branches: [ main ]
   pull_request:
-    branches: [ setup-custom-environment-path ]
+    branches: [ main ]
 
 jobs:
   test:
