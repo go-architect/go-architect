@@ -17,7 +17,12 @@ jobs:
         with:
           go-version: 1.19
 
-      - name: Load Wails
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+
+      - name: Install Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
       - name: Check Wails Version
@@ -26,11 +31,17 @@ jobs:
       - name: Build Go Architect
         run: wails build -platform=darwin/arm64
 
+      - name: Install node-appdmg
+        run: npm install -g appdmg
+
       - name: Install Create-DMG
         run: brew install create-dmg
 
       - name: Create Go Architect DMG
-        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
+        run: appdmg appdmg.json "Go-Architect-${{github.ref_name}}.dmg"
+
+#      - name: Create Go Architect DMG
+#        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
       - name: Save DMG Image in workspace
         uses: actions/upload-artifact@v3
