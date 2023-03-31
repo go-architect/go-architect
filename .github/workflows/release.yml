@@ -30,13 +30,13 @@ jobs:
         run: brew install create-dmg
 
       - name: Create Go Architect DMG
-        run: create-dmg "Go-Architect.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
+        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
       - name: Save DMG Image in workspace
         uses: actions/upload-artifact@v3
         with:
           name: "Go-Architect-${{github.ref_name}}.dmg"
-          path: "Go-Architect.dmg"
+          path: "Go-Architect-${{github.ref_name}}.dmg"
 
   changelog:
     needs: build-macos
@@ -79,5 +79,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: CHANGELOG.txt
-          files: |
-            Go-Architect-${{github.ref_name}}.dmg
+          files: "Go-Architect-${{github.ref_name}}.dmg"
