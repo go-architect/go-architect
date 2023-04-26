@@ -1,10 +1,9 @@
 <script lang="ts">
 import {defineComponent, reactive} from 'vue'
-import {getSelectedProject, saveSelectedProject} from "../utils/storage";
+import {saveSelectedProject} from "../utils/storage";
 import Welcome from "./Welcome.vue";
 import ProjectList from "./ProjectList.vue";
 import CheckEnvironment from "./CheckEnvironment.vue";
-import {booleanLiteral} from "@babel/types";
 import {CheckEnvironmentPath} from "../../wailsjs/go/main/App";
 
 const data = reactive({

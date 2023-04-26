@@ -12,6 +12,7 @@ const emits = defineEmits(["selected"])
 const result : Project[] = [];
 const data = reactive({
   folder: "",
+  projectName: "",
   enableCreate: false,
   projects: result,
 })
@@ -30,8 +31,12 @@ function openDirectorySelectionDialog() {
 }
 
 function createProject() {
+  if (data.projectName === "") {
+    displayToast("alert", "Please enter a project name.")
+    return
+  }
   if (data.folder === "") {
-    console.log("Please select a project folder")
+    displayToast("alert", "Please select a project folder.")
     return
   }
 
@@ -48,9 +53,11 @@ function createProject() {
 
 function saveProject(projectInfo: any) {
   projectInfo.id = uuidv4()
+  projectInfo.name = data.projectName
   data.projects.push(projectInfo)
   localStorage.setItem('projects', JSON.stringify(data.projects));
   data.folder = ""
+  data.projectName = ""
   data.enableCreate = false
   displayToast("success", "Go Project was created successfully")
 }
@@ -64,20 +71,27 @@ function handleSelected(project: any) {
   emits("selected", project)
 }
 
+function projectNameInput($event: any) {
+  data.projectName = $event.target.value
+}
+
 function canCreate() {
   return data.enableCreate
 }
 
 function displayToast(type: string, message: string) {
+  let title = 'Info'
   let tClass = 'bg-info'
   if(type==='success'){
     tClass = 'bg-success'
+    title = 'Success'
   }
   if(type==='alert'){
     tClass = 'bg-danger'
+    title = 'Alert'
   }
   (<any>$(document)).Toasts('create', {
-    title: 'Error',
+    title: title,
     body: message,
     class: tClass,
     fixed: false,
@@ -115,12 +129,18 @@ function displayToast(type: string, message: string) {
         </div>
         <div class="modal-body">
           <div>
-            <div class="folder-selection float-left">
+            <div class="input-selection float-left">
+              <span class="title">Project Name: </span>
+              <input class="form-control" placeholder="Enter Project Name"
+                v-bind:value="data.projectName" v-on:input="projectNameInput" />
+            </div>
+            <div style="clear: both;"/>
+            <div class="input-selection float-left">
               <span class="title">Go Project Directory: </span>
               <span v-if="data.folder === ''" class="path default">Please select a project folder</span>
               <span v-else class="path">{{ data.folder }}</span>
+              <button type="button" class="btn btn-default float-right"  v-on:click="openDirectorySelectionDialog">Choose Directory</button>
             </div>
-            <button type="button" class="btn btn-default float-right"  v-on:click="openDirectorySelectionDialog">Choose Directory</button>
           </div>
         </div>
         <div class="modal-footer justify-content-between">
@@ -128,25 +148,24 @@ function displayToast(type: string, message: string) {
           <button type="button" class="btn btn-primary" v-bind:class="canCreate()? '':'disabled'" v-on:click="createProject" data-dismiss="modal">Create Project</button>
         </div>
       </div>
-
     </div>
   </div>
 </template>
 
 <style scoped>
-.folder-selection {
+.input-selection {
   margin-top: 10px;
+  width: 100%;
 }
-.folder-selection > .title {
+.input-selection > .title {
   font-weight: bold;
 }
-.folder-selection > .path {
+.input-selection > .path {
   font-size: 14px;
 }
-.folder-selection > .default {
+.input-selection > .default {
   color: #aaaaaa;
 }
-
 .add-project {
   margin-right: 10px;
 }
