@@ -9,10 +9,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "dagre": "github:dagrejs/dagre",
     "jquery": "^3.6.3",
     "uuid": "^9.0.0",
-    "v-network-graph": "^0.8.1",
+    "vis-network": "^9.1.6",
     "vue": "^3.2.37",
     "vue-router": "^4.1.6"
   },
