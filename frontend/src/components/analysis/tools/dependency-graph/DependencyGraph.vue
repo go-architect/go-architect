@@ -19,7 +19,7 @@
             <div class="card-header">
               <h3 class="card-title">Package Details</h3>
             </div>
-            <div class="card-body package-details">
+            <div v-if="selectedNode != undefined" class="card-body package-details">
               <ul class="list-group list-group-unbordered mb-3">
                 <li class="list-group-item">
                   <b>Selected Package</b>
@@ -39,6 +39,9 @@
                 </li>
               </ul>
             </div>
+            <div v-else class="card-body package-details">
+              No node selected
+            </div>
           </div>
         </div>
       </div>
@@ -48,7 +51,7 @@
 
 <script lang="ts">
 import {defineComponent} from "vue";
-import * as vis from "vis-network/peer";
+import * as vis from "vis-network/standalone";
 
 import {getSelectedProject} from "../../../../utils/storage";
 import {dependency, project} from "../../../../../wailsjs/go/models";
@@ -58,6 +61,11 @@ import LegendBox from "./LegendBox.vue";
 const nodeEdges: any[] = []
 const nodesArray: vis.Node[] = []
 const edgesArray: vis.Edge[] = []
+type SelectedNodeType = {
+  package: string,
+  dependencies: string[],
+  dependants: string[]
+}
 
 export default defineComponent( {
   name: "DependencyGraph",
@@ -66,11 +74,7 @@ export default defineComponent( {
     return {
       nodes: nodesArray,
       edges: edgesArray,
-      selectedNode: {
-        package: "",
-        dependencies: [],
-        dependants: []
-      },
+      selectedNode: undefined as SelectedNodeType | undefined,
       project: undefined as project.ProjectInfo | undefined,
       result: undefined as dependency.ModuleDependencyGraph | undefined,
       nodesSize: 0
@@ -94,7 +98,10 @@ export default defineComponent( {
             arrows: {
               to: true
             },
-            chosen: true
+            chosen: {
+              label: false,
+              edge: true
+            }
           })
           const idx2 = nodeEdges.findIndex((ne) => ne.name === origin)
           if (idx2 >= 0) {
@@ -106,41 +113,12 @@ export default defineComponent( {
       }
     },
     mapNodes(dg: dependency.ModuleDependencyGraph){
-      const selectNode = (node: string) => {
-        function getDependencies(edgesArray: vis.Edge[], node: string) {
-          const dependencies: string[] = []
-          edgesArray.forEach(edge => {
-            if (edge.from == node && edge.to != undefined) {
-              dependencies.push(edge.to+"")
-            }
-          })
-          return dependencies
-        }
-        function getDependants(edgesArray: vis.Edge[], node: string) {
-          const dependants: string[] = []
-          edgesArray.forEach(edge => {
-            if (edge.to == node && edge.from != undefined) {
-              dependants.push(edge.from+"")
-            }
-          })
-          return dependants
-        }
-
-        this.selectedNode = {
-          package: node,
-          dependencies: getDependencies(edgesArray, node),
-          dependants: getDependants(edgesArray, node)
-        }
-      }
       for(let n in dg.internal){
         nodesArray.push({
           id: dg.internal[n],
           label: dg.internal[n],
           color: "#80d6ff",
-          shape: 'box',
-          chosen: {
-            label: () => selectNode(dg.internal[n])
-          }
+          shape: 'box'
         })
       }
       for(let n in dg.organization){
@@ -148,10 +126,7 @@ export default defineComponent( {
           id: dg.organization[n],
           label: dg.organization[n],
           color: "#fab57a",
-          shape: 'box',
-          chosen: {
-            label: () => selectNode(dg.organization[n])
-          }
+          shape: 'box'
         })
       }
       for(let n in dg.external){
@@ -159,10 +134,7 @@ export default defineComponent( {
           id: dg.external[n],
           label: dg.external[n],
           color: "#f06868",
-          shape: 'box',
-          chosen: {
-            label: () => selectNode(dg.external[n])
-          }
+          shape: 'box'
         })
       }
       for(let n in dg.standard){
@@ -170,10 +142,7 @@ export default defineComponent( {
           id: dg.standard[n],
           label: dg.standard[n],
           color: "#edf798",
-          shape: 'box',
-          chosen: {
-            label: () => selectNode(dg.standard[n])
-          }
+          shape: 'box'
         })
       }
       this.nodesSize = dg.internal.length + dg.external.length + dg.standard.length
@@ -207,10 +176,46 @@ export default defineComponent( {
           nodeDistance: 300,
           avoidOverlap: 1
         }
-      }
+      },
+      interaction: {
+        navigationButtons: true,
+        zoomView: false
+      },
     }
     const container = document.getElementById('dependency-graph');
-    new vis.Network(container!, graphData, options);
+    const network = new vis.Network(container!, graphData, options);
+
+    network.on("select", (params) => {
+      function getDependencies(edgesArray: vis.Edge[], node: string) {
+        const dependencies: string[] = []
+        edgesArray.forEach(edge => {
+          if (edge.from == node && edge.to != undefined) {
+            dependencies.push(edge.to+"")
+          }
+        })
+        return dependencies
+      }
+      function getDependants(edgesArray: vis.Edge[], node: string) {
+        const dependants: string[] = []
+        edgesArray.forEach(edge => {
+          if (edge.to == node && edge.from != undefined) {
+            dependants.push(edge.from+"")
+          }
+        })
+        return dependants
+      }
+
+      if (params.nodes.length === 0) {
+        this.selectedNode = undefined
+      } else {
+        this.selectedNode = {
+          package: params.nodes[0],
+          dependencies: getDependencies(edgesArray, params.nodes[0]),
+          dependants: getDependants(edgesArray, params.nodes[0])
+        }
+
+      }
+    });
   }
 })
 </script>
