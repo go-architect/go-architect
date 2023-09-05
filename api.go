@@ -13,7 +13,6 @@ import (
 	"github.com/fdaines/go-architect-lib/metrics/types"
 	"github.com/fdaines/go-architect-lib/project"
 	"github.com/fdaines/go-architect-lib/repository"
-	localDSM "github.com/fdaines/go-architect/backend/dsm"
 	"github.com/fdaines/go-architect/backend/git"
 	"github.com/fdaines/go-architect/backend/gocyclo"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -102,7 +101,6 @@ func (a *Api) GetDSM(project *project.ProjectInfo) *dsm.DependencyStructureMatri
 		runtime.LogErrorf(a.ctx, "GetDSM - Error: %s\n", err.Error())
 		return nil
 	}
-	result = localDSM.RearrangeDSM(result)
 	return result
 }
 

@@ -3,7 +3,7 @@ module github.com/fdaines/go-architect
 go 1.18
 
 require (
-	github.com/fdaines/go-architect-lib v1.0.4
+	github.com/fdaines/go-architect-lib v1.0.6
 	github.com/go-git/go-git/v5 v5.5.1
 	github.com/wailsapp/wails/v2 v2.3.1
 	golang.org/x/sys v0.3.0

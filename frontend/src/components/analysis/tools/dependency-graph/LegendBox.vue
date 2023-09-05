@@ -45,14 +45,15 @@ export default defineComponent({
 
 <style scoped>
 .list-group-item{
-  padding: .25rem .25rem
-}
-.details {
+  padding: .20rem .20rem;
   font-size: 12px;
 }
+.float-right {
+  height: 20px;
+}
 .dot {
-  height: 25px;
-  width: 25px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
   display: inline-block;
 }
