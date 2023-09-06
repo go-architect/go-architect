@@ -3,10 +3,10 @@ module github.com/fdaines/go-architect
 go 1.18
 
 require (
-	github.com/fdaines/go-architect-lib v1.0.6
+	github.com/fdaines/go-architect-lib v1.0.7
 	github.com/go-git/go-git/v5 v5.5.1
-	github.com/wailsapp/wails/v2 v2.3.1
-	golang.org/x/sys v0.3.0
+	github.com/wailsapp/wails/v2 v2.5.1
+	golang.org/x/sys v0.5.0
 )
 
 require (
@@ -46,8 +46,8 @@ require (
 	golang.org/x/crypto v0.3.0 // indirect
 	golang.org/x/exp v0.0.0-20220303212507-bbda1eaf7a17 // indirect
 	golang.org/x/mod v0.7.0 // indirect
-	golang.org/x/net v0.3.0 // indirect
-	golang.org/x/text v0.5.0 // indirect
+	golang.org/x/net v0.7.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 	golang.org/x/tools v0.4.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 )

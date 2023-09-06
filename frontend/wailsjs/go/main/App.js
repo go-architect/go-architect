@@ -10,8 +10,28 @@ export function GetGoVersion() {
   return window['go']['main']['App']['GetGoVersion']();
 }
 
+export function GetProjectList() {
+  return window['go']['main']['App']['GetProjectList']();
+}
+
+export function GetSelectedProject() {
+  return window['go']['main']['App']['GetSelectedProject']();
+}
+
 export function OpenDirectoryDialog() {
   return window['go']['main']['App']['OpenDirectoryDialog']();
+}
+
+export function RemoveSelectedProject() {
+  return window['go']['main']['App']['RemoveSelectedProject']();
+}
+
+export function SaveProjectList(arg1) {
+  return window['go']['main']['App']['SaveProjectList'](arg1);
+}
+
+export function SaveSelectedProject(arg1) {
+  return window['go']['main']['App']['SaveSelectedProject'](arg1);
 }
 
 export function SetContext(arg1) {

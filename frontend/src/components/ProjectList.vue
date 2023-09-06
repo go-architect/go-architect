@@ -5,7 +5,7 @@ import {OpenDirectoryDialog} from "../../wailsjs/go/main/App";
 import {GetProjectInfo} from "../../wailsjs/go/main/Api";
 import {v4 as uuidv4} from "uuid";
 import ProjectBox from './ProjectBox.vue'
-import {getProjectsList} from "../utils/storage";
+import {getProjectsList, saveProjectsList} from "../utils/storage";
 
 const emits = defineEmits(["selected"])
 
@@ -17,8 +17,8 @@ const data = reactive({
   projects: result,
 })
 
-onMounted(() => {
-  data.projects = getProjectsList()
+onMounted(async () => {
+  data.projects = (await getProjectsList()).projects
 })
 
 function openDirectorySelectionDialog() {
@@ -55,7 +55,7 @@ function saveProject(projectInfo: any) {
   projectInfo.id = uuidv4()
   projectInfo.name = data.projectName
   data.projects.push(projectInfo)
-  localStorage.setItem('projects', JSON.stringify(data.projects));
+  saveProjectsList(data.projects)
   data.folder = ""
   data.projectName = ""
   data.enableCreate = false
@@ -64,7 +64,7 @@ function saveProject(projectInfo: any) {
 
 function handleDelete({ id }: any) {
   data.projects = data.projects.filter(p => p.id !== id)
-  localStorage.setItem('projects', JSON.stringify(data.projects));
+  saveProjectsList(data.projects)
 }
 
 function handleSelected(project: any) {

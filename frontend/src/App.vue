@@ -4,6 +4,8 @@ import { useRouter } from 'vue-router'
 import ProjectSelection from './components/ProjectSelection.vue'
 import ProjectAnalysis from './components/analysis/ProjectAnalysis.vue'
 import { getSelectedProject } from './utils/storage'
+import {project} from "../wailsjs/go/models";
+import ProjectInfo = project.ProjectInfo;
 
 const data = reactive({
   selectedProject: "",
@@ -13,17 +15,17 @@ export default defineComponent({
   components: {ProjectSelection, ProjectAnalysis},
   data() {
     return {
-      selectedProject: null,
+      selectedProject: null as ProjectInfo | null,
     }
   },
-  created() {
+  async created() {
     const router = useRouter()
-    const currentProject = getSelectedProject()
-    if (currentProject!=null){
+    const currentProject = await getSelectedProject()
+    if (currentProject != null) {
       this.selectedProject = currentProject
-      router.push("/analysis")
+      await router.push("/analysis")
     } else {
-      router.push("/projects")
+      await router.push("/projects")
     }
   }
 })

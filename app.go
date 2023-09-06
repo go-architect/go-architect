@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"github.com/fdaines/go-architect/backend/storage"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	exec "golang.org/x/sys/execabs"
 	"os"
@@ -65,6 +66,26 @@ func (a *App) CheckEnvironmentPath() bool {
 	runtime.LogInfof(a.ctx, "CheckEnvironmentPath - GoVersion: %s", a.goVersion)
 
 	return true
+}
+
+func (a *App) GetProjectList() storage.ProjectList {
+	return storage.GetProjectList()
+}
+
+func (a *App) SaveProjectList(projects storage.ProjectList) {
+	storage.SaveProjectList(projects)
+}
+
+func (a *App) SaveSelectedProject(project storage.Project) {
+	storage.SaveSelectedProject(project)
+}
+
+func (a *App) RemoveSelectedProject() {
+	storage.RemoveSelectedProject()
+}
+
+func (a *App) GetSelectedProject() storage.SelectedProject {
+	return storage.GetSelectedProject()
 }
 
 func (a *App) GetGoVersion() string {

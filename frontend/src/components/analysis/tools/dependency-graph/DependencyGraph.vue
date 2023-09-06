@@ -75,7 +75,7 @@ export default defineComponent( {
       nodes: nodesArray,
       edges: edgesArray,
       selectedNode: undefined as SelectedNodeType | undefined,
-      project: undefined as project.ProjectInfo | undefined,
+      project: null as project.ProjectInfo | null,
       result: undefined as dependency.ModuleDependencyGraph | undefined,
       nodesSize: 0
     }
@@ -150,9 +150,9 @@ export default defineComponent( {
     }
   },
   async mounted() {
-    this.project = getSelectedProject()
-    if(this.project !== undefined){
-      const dg = await GetDependencyGraph(this.project)
+    this.project = await getSelectedProject()
+    if(this.project !== null){
+      const dg = await GetDependencyGraph(this.project!)
       this.mapToNetworkGraph(dg)
     }
 

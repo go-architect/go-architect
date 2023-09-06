@@ -12,7 +12,7 @@ export default defineComponent({
   data() {
     return {
       loading: false,
-      project: undefined as project.ProjectInfo | undefined,
+      project: null as project.ProjectInfo | null,
       result: undefined as coupling.DependencyCoupling | undefined
     }
   },
@@ -20,14 +20,14 @@ export default defineComponent({
     async runDependencyCoupling({dependency}: any) {
       this.result = undefined
       this.loading = true
-      if(this.project!=undefined){
+      if(this.project!=null){
         this.result = await GetDependencyCoupling(this.project, dependency)
         this.loading = false
       }
     }
   },
   async mounted() {
-    this.project = getSelectedProject()
+    this.project = await getSelectedProject()
   }
 })
 </script>

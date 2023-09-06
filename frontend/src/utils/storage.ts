@@ -1,32 +1,41 @@
-export const getSelectedProject = () => {
-    const ps = localStorage.getItem("project")
-    if(ps != null){
-        return JSON.parse(ps)
+import {GetProjectList, GetSelectedProject, RemoveSelectedProject, SaveProjectList, SaveSelectedProject} from "../../wailsjs/go/main/App";
+import {project, storage} from "../../wailsjs/go/models";
+import ProjectList = storage.ProjectList;
+import ProjectInfo = project.ProjectInfo;
+
+export const getSelectedProject = async (): Promise<ProjectInfo | null> => {
+    const sp = await GetSelectedProject()
+    if (!sp.Selected) {
+        return null
     }
-    return null
+    return sp.Project
 }
 
-export const saveSelectedProject = (project: any) => {
-    localStorage.setItem("project", JSON.stringify(project))
-    const pl = getProjectsList()
-    if(pl!=null){
-        for(let i=0;i<pl.length;i++){
-            if(pl[i].id === project.id){
-                pl[i].organization_packages = project.organization_packages
+export const saveSelectedProject = async (project: any) => {
+    await SaveSelectedProject(project)
+    const pl = await getProjectsList()
+    if (pl != null) {
+        for (let i = 0; i < pl.projects.length; i++) {
+            if (pl.projects[i].id === project.id) {
+                pl.projects[i].organization_packages = project.organization_packages
             }
         }
     }
-    localStorage.setItem("projects", JSON.stringify(pl))
+    await SaveProjectList(pl)
 }
 
-export const removeSelectedProject = () => {
-    localStorage.removeItem("project")
+export const removeSelectedProject = async () => {
+    await RemoveSelectedProject()
 }
 
-export const getProjectsList = () => {
-    const pl = localStorage.getItem("projects")
-    if(pl != null){
-        return JSON.parse(pl)
-    }
-    return []
+export const saveProjectsList = async (projects: any) => {
+    console.log("Save Project List: ", projects)
+    const projectList = new ProjectList({"projects": projects})
+    await SaveProjectList(projectList)
+}
+
+export const getProjectsList = async () => {
+    const projectList = await GetProjectList()
+    console.log("Projects: ", projectList)
+    return projectList
 }

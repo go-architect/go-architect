@@ -86,15 +86,15 @@ export default defineComponent({
       this.analyzeVcs({range})
     },
     async analyzeVcs({range}: any) {
-      const project = getSelectedProject()
+      const project = await getSelectedProject()
       this.months = range
-      this.vcs = await GetVCSAnalysisInfo(project, this.months)
+      this.vcs = await GetVCSAnalysisInfo(project!, this.months)
     }
   },
   async mounted() {
-    const project = getSelectedProject()
+    const project = await getSelectedProject()
     this.months = 6
-    this.vcs = await GetVCSAnalysisInfo(project, this.months)
+    this.vcs = await GetVCSAnalysisInfo(project!, this.months)
   }
 })
 </script>

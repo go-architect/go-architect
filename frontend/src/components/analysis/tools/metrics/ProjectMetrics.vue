@@ -29,7 +29,7 @@ const data = reactive({
 })
 
 onMounted(async () => {
-  const project = getSelectedProject()
+  const project = await getSelectedProject()
   if(project != null){
     [data.loc, data.comments, data.types, data.interfaces] = await Promise.all([
       GetMetricsLOC(project),

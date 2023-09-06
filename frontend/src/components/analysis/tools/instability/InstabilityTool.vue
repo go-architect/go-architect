@@ -38,8 +38,8 @@ export default defineComponent({
     }
   },
   async mounted() {
-    const project = getSelectedProject()
-    this.collection = await GetInstability(project)
+    const project = await getSelectedProject()
+    this.collection = await GetInstability(project!)
   }
 })
 </script>
