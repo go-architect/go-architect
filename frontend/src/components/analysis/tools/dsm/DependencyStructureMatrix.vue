@@ -15,24 +15,26 @@
           <div class="text-bold pt-2">Loading Dependency Structure Matrix...</div>
         </div>
       </div>
-      <table v-else class="dsm table table-bordered">
-        <thead>
-        <tr>
-          <th>Package</th>
-          <th class="package-id">#</th>
-          <th v-for="(p, idx) in dsm" class="package-id">{{ idx+1 }}</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(p, idx) in dsm">
-          <td class="package-name">{{ p[0] }}</td>
-          <td class="package-id">{{ idx+1 }}</td>
-          <td v-for="idx2 in p.length-1" :class="resolveClasses(p, idx, idx2)">
-            {{(idx===idx2-1) ? "": displayValue(p[idx2])}}
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <div v-else class="dsm">
+        <table class="table table-responsive table-bordered">
+          <thead>
+          <tr>
+            <th>Package</th>
+            <th class="package-id">#</th>
+            <th v-for="(p, idx) in dsm" class="package-id" :title=p[0]>{{ idx+1 }}</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="(p, idx) in dsm">
+            <td class="package-name" :title=p[0]>{{ wrapPackageName(p[0], mainPackage) }}</td>
+            <td class="package-id" :title=p[0]>{{ idx+1 }}</td>
+            <td v-for="idx2 in p.length-1" :class="resolveClasses(p, idx, idx2)">
+              {{(idx===idx2-1) ? "": displayValue(p[idx2])}}
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>
@@ -50,6 +52,7 @@ export default defineComponent({
   },
   data() {
     return {
+      mainPackage: "",
       dsm: [] as string[][],
     }
   },
@@ -67,14 +70,19 @@ export default defineComponent({
     },
     resolveClasses(p: any, idx1: number, idx2: number) {
       const classes = [];
-
       if(idx1===idx2-1){
         classes.push("same-package")
       }
       if(p[idx2]>0){
         classes.push("dependency")
       }
-      return classes.join()
+      classes.push("dsm-cell")
+      return classes.join(" ")
+    },
+    wrapPackageName(p: string, mainPackage: string) {
+      if (p===mainPackage) return p
+
+      return p.replace(mainPackage, "{{MainPackage}}")
     }
   },
   async mounted() {
@@ -82,6 +90,7 @@ export default defineComponent({
     const dsm = await GetDSM(project!)
     console.log(dsm)
     this.dsm = this.mapToViewModel(dsm)
+    this.mainPackage = project?.package!
   }
 })
 </script>
@@ -93,7 +102,6 @@ export default defineComponent({
 }
 
 .dsm {
-  width: unset;
   font-size: 8px;
 }
 .package-id {
@@ -103,6 +111,10 @@ export default defineComponent({
 }
 .package-name {
   text-align: left !important;
+}
+.dsm-cell {
+  width: 20px;
+  height: 20px;
 }
 .same-package {
   background-color: #dddddd;
