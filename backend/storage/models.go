@@ -49,4 +49,7 @@ type Metrics struct {
 	CommentsRatio          float64 `json:"comments_lines_ratio"`      // ratio of comment lines (comments_loc / project_loc)
 	FilesWithComments      int     `json:"files_with_comments"`       // number of files with comments
 	FilesWithCommentsRatio float64 `json:"files_with_comments_ratio"` // ratio of files with comments
+
+	AverageCyclomaticComplexity float64 `json:"cyclomatic_complexity_avg"`
+	AverageCognitiveComplexity  float64 `json:"cognitive_complexity_avg"`
 }

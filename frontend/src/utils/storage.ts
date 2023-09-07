@@ -18,6 +18,7 @@ export const saveSelectedProject = async (project: any) => {
         for (let i = 0; i < pl.projects.length; i++) {
             if (pl.projects[i].id === project.id) {
                 pl.projects[i].organization_packages = project.organization_packages
+                pl.projects[i].historical_metrics = project.historical_metrics
             }
         }
     }

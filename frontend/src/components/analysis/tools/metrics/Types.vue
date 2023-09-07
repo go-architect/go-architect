@@ -1,34 +1,125 @@
 <script lang="ts" setup>
+import {reactive} from "vue";
+import {storage} from "../../../../../wailsjs/go/models";
+import HistoricalMetrics = storage.HistoricalMetrics;
+import Metrics = storage.Metrics;
+import HistoricChart from "./HistoryChart.vue";
+import {COLORS, DataSetEntry, transparentize} from "./HistoryChartTypes";
+import {resolveIcon, resolveStyle, resolveHint} from "./HistoryChartTypes";
 
-const props = defineProps(['data', 'previous'])
+const props = defineProps(['data', 'previous', 'historical'])
 
-const resolveIcon = (current: number, previous:number): string => {
-  if (current == previous) {
-    return "fa-solid fa-circle"
+const localData = reactive({
+  historical: [] as HistoricalMetrics[],
+  chartData: {
+    labels: [] as string[],
+    datasets: [] as DataSetEntry[]
   }
-  if (current > previous) {
-    return "fa-solid fa-circle-up"
+})
+
+const showChart = () => {
+  if(props.historical !== undefined) {
+    localData.historical = [...props.historical]
+    if(localData.historical.length > 10){
+      localData.historical = localData.historical.slice(props.historical.length - 10)
+    }
   }
-  return "fa-solid fa-circle-down"
+  localData.historical.push(createTodayData())
+  localData.chartData = resolveChartData();
 }
-const resolveStyle = (current: number, previous:number): string => {
-  if (current == previous) {
-    return "color: #f1d104;"
-  }
-  if (current > previous) {
-    return "color: #06a741;"
-  }
-  return "color: #df0707;"
+
+const createTodayData = () => {
+  return HistoricalMetrics.createFrom({
+    date: 'Today',
+    commit: '',
+    metrics: Metrics.createFrom({
+      source_files: props.data.source_files,
+      structs: props.data.structs,
+      interfaces: props.data.interfaces,
+      functions: props.data.functions,
+      methods: props.data.methods,
+      variables: props.data.variables,
+      constants: props.data.constants,
+      num_packages: props.data.packages
+    })
+  });
 }
-const resolveHint = (current: number, previous:number): string => {
-  console.log("current: " + current, "previous: "+previous, `-${previous-current} since last analysis`)
-  if (current == previous) {
-    return "No changes since last analysis"
+
+const resolveChartData = () => {
+  const labels = ['']
+  localData.historical.forEach(value => labels.push(value.date))
+  labels.push('')
+
+  const packagesData: (number | null)[] = [null]
+  const sourceFilesData: (number | null)[] = [null]
+  const structsData: (number | null)[] = [null]
+  const interfacesData: (number | null)[] = [null]
+  const functionsData: (number | null)[] = [null]
+  const methodsData: (number | null)[] = [null]
+  const variablesData: (number | null)[] = [null]
+  const constantsData: (number | null)[] = [null]
+  localData.historical.forEach(value => {
+    packagesData.push(value.metrics.num_packages)
+    sourceFilesData.push(value.metrics.source_files)
+    structsData.push(value.metrics.structs)
+    interfacesData.push(value.metrics.interfaces)
+    functionsData.push(value.metrics.functions)
+    methodsData.push(value.metrics.methods)
+    variablesData.push(value.metrics.variables)
+    constantsData.push(value.metrics.constants)
+  })
+  packagesData.push(null)
+  sourceFilesData.push(null)
+  structsData.push(null)
+  interfacesData.push(null)
+  functionsData.push(null)
+  methodsData.push(null)
+  variablesData.push(null)
+  constantsData.push(null)
+
+  return {
+    labels,
+    datasets: [
+      {label: "Packages", borderColor: COLORS.red, backgroundColor: transparentize(COLORS.red), data: packagesData},
+      {
+        label: "Source Files",
+        borderColor: COLORS.blue,
+        backgroundColor: transparentize(COLORS.blue),
+        data: sourceFilesData
+      },
+      {label: "Structs", borderColor: COLORS.green, backgroundColor: transparentize(COLORS.green), data: structsData},
+      {
+        label: "Interfaces",
+        borderColor: COLORS.purple,
+        backgroundColor: transparentize(COLORS.purple),
+        data: interfacesData
+      },
+      {
+        label: "Functions",
+        borderColor: COLORS.orange,
+        backgroundColor: transparentize(COLORS.orange),
+        data: functionsData
+      },
+      {
+        label: "Methods",
+        borderColor: COLORS.yellow,
+        backgroundColor: transparentize(COLORS.yellow),
+        data: methodsData
+      },
+      {
+        label: "Variables",
+        borderColor: COLORS.waterblue,
+        backgroundColor: transparentize(COLORS.waterblue),
+        data: variablesData
+      },
+      {
+        label: "Constants",
+        borderColor: COLORS.pink,
+        backgroundColor: transparentize(COLORS.pink),
+        data: constantsData
+      }
+    ]
   }
-  if (current > previous) {
-    return `+${current-previous} since last analysis`
-  }
-  return `-${previous-current} since last analysis`
 }
 </script>
 
@@ -38,7 +129,7 @@ const resolveHint = (current: number, previous:number): string => {
       <h3 class="card-title">Types</h3>
       <div class="text-right">
         <div class="btn btn-sm btn-default action" title="View Metrics Chart"
-             data-toggle="modal" data-target="#modal-types-metrics-chart">
+             data-toggle="modal" data-target="#modal-types-metrics-chart" v-on:click="showChart">
           <i class="fa-solid fa-chart-line"></i>
         </div>
       </div>
@@ -154,7 +245,7 @@ const resolveHint = (current: number, previous:number): string => {
           </button>
         </div>
         <div class="modal-body">
-          Hola
+          <HistoricChart :data="localData.chartData" />
         </div>
         <div class="modal-footer justify-content-between">
           <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>

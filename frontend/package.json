@@ -9,10 +9,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@kurkle/color": "^0.3.2",
+    "chart.js": "^4.4.0",
     "jquery": "^3.6.3",
+    "moment": "^2.29.4",
     "uuid": "^9.0.0",
     "vis-network": "^9.1.6",
     "vue": "^3.2.37",
+    "vue-chartjs": "^5.2.0",
     "vue-router": "^4.1.6"
   },
   "devDependencies": {

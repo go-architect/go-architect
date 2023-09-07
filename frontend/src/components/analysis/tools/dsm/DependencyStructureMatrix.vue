@@ -88,7 +88,6 @@ export default defineComponent({
   async mounted() {
     const project = await getSelectedProject()
     const dsm = await GetDSM(project!)
-    console.log(dsm)
     this.dsm = this.mapToViewModel(dsm)
     this.mainPackage = project?.package!
   }

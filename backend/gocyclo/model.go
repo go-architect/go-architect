@@ -1,7 +1,7 @@
 package gocyclo
 
 type GoCycloOutput struct {
-	AverageComplexity float64
+	AverageComplexity float64 `json:"average_complexity"`
 	ComplexityDetails []*ComplexityDetail
 }
 

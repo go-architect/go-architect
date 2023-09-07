@@ -192,6 +192,23 @@ export namespace dsm {
 
 }
 
+export namespace gocyclo {
+
+	export class GoCycloOutput {
+	    average_complexity: number;
+
+	    static createFrom(source: any = {}) {
+	        return new GoCycloOutput(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.average_complexity = source["average_complexity"];
+	    }
+	}
+
+}
+
 export namespace instability {
 
 	export class PackageInstability {
@@ -422,6 +439,8 @@ export namespace storage {
 	    comments_lines_ratio: number;
 	    files_with_comments: number;
 	    files_with_comments_ratio: number;
+	    cyclomatic_complexity_avg: number;
+	    cognitive_complexity_avg: number;
 
 	    static createFrom(source: any = {}) {
 	        return new Metrics(source);
@@ -451,6 +470,8 @@ export namespace storage {
 	        this.comments_lines_ratio = source["comments_lines_ratio"];
 	        this.files_with_comments = source["files_with_comments"];
 	        this.files_with_comments_ratio = source["files_with_comments_ratio"];
+	        this.cyclomatic_complexity_avg = source["cyclomatic_complexity_avg"];
+	        this.cognitive_complexity_avg = source["cognitive_complexity_avg"];
 	    }
 	}
 	export class HistoricalMetrics {
