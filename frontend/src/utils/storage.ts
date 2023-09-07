@@ -1,9 +1,9 @@
 import {GetProjectList, GetSelectedProject, RemoveSelectedProject, SaveProjectList, SaveSelectedProject} from "../../wailsjs/go/main/App";
-import {project, storage} from "../../wailsjs/go/models";
+import {storage} from "../../wailsjs/go/models";
 import ProjectList = storage.ProjectList;
-import ProjectInfo = project.ProjectInfo;
+import Project = storage.Project;
 
-export const getSelectedProject = async (): Promise<ProjectInfo | null> => {
+export const getSelectedProject = async (): Promise<Project | null> => {
     const sp = await GetSelectedProject()
     if (!sp.Selected) {
         return null
@@ -29,13 +29,11 @@ export const removeSelectedProject = async () => {
 }
 
 export const saveProjectsList = async (projects: any) => {
-    console.log("Save Project List: ", projects)
     const projectList = new ProjectList({"projects": projects})
     await SaveProjectList(projectList)
 }
 
 export const getProjectsList = async () => {
     const projectList = await GetProjectList()
-    console.log("Projects: ", projectList)
     return projectList
 }

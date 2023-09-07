@@ -13,9 +13,11 @@ import CognitiveComplexity from "./CognitiveComplexity.vue"
 import Interfaces from "./Interfaces.vue"
 import LinesOfCode from "./LinesOfCode.vue"
 import Types from "./Types.vue"
-import {comments, interfaces, loc, project, types} from "../../../../../wailsjs/go/models";
+import {comments, interfaces, loc, storage, types} from "../../../../../wailsjs/go/models";
 import {onMounted, reactive} from "vue";
 import {getSelectedProject} from "../../../../utils/storage";
+import HistoricalMetrics = storage.HistoricalMetrics;
+import Metrics = storage.Metrics;
 
 const data = reactive({
   loc: undefined as loc.ProjectLOC | undefined,
@@ -26,6 +28,8 @@ const data = reactive({
   cognitiveComplexity: undefined,
   cyclomaticComplexityError: undefined,
   cognitiveComplexityError: undefined,
+  previousMetricsElement: undefined as HistoricalMetrics | undefined,
+  previousMetrics: undefined as Metrics | undefined,
 })
 
 onMounted(async () => {
@@ -37,6 +41,14 @@ onMounted(async () => {
       GetMetricsTypes(project),
       GetMetricsInterfaces(project),
     ])
+    if(project.historical_metrics != null && project.historical_metrics.length>0) {
+      data.previousMetricsElement = project.historical_metrics.sort((a, b) => b.date.localeCompare(a.date)).at(0)
+      console.log("LastData ", data.previousMetricsElement)
+      data.previousMetrics = data.previousMetricsElement?.metrics
+      console.log("LastMetrics ", data.previousMetrics)
+    } else {
+      console.log("not historical data")
+    }
     try {
       data.cognitiveComplexity = await GetMetricsCognitiveComplexity(project)
     } catch(error: any) {
@@ -68,7 +80,7 @@ onMounted(async () => {
           <interfaces :data="data.interfaces" />
         </div>
         <div class="col-md-12 col-lg-3">
-          <types :data=data.types />
+          <types :data=data.types :previous=data.previousMetrics />
           <comments :data=data.comments />
         </div>
         <div class="col-md-12 col-lg-5">

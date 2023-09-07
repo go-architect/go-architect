@@ -399,12 +399,102 @@ export namespace repository {
 
 export namespace storage {
 
+	export class Metrics {
+	    source_files: number;
+	    structs: number;
+	    interfaces: number;
+	    functions: number;
+	    methods: number;
+	    variables: number;
+	    constants: number;
+	    public_structs: number;
+	    public_interfaces: number;
+	    public_functions: number;
+	    public_methods: number;
+	    public_variables: number;
+	    public_constants: number;
+	    num_packages: number;
+	    total_loc: number;
+	    interface_avg_size: number;
+	    interface_max_size: number;
+	    interface_min_size: number;
+	    comments_total_lines: number;
+	    comments_lines_ratio: number;
+	    files_with_comments: number;
+	    files_with_comments_ratio: number;
+
+	    static createFrom(source: any = {}) {
+	        return new Metrics(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.source_files = source["source_files"];
+	        this.structs = source["structs"];
+	        this.interfaces = source["interfaces"];
+	        this.functions = source["functions"];
+	        this.methods = source["methods"];
+	        this.variables = source["variables"];
+	        this.constants = source["constants"];
+	        this.public_structs = source["public_structs"];
+	        this.public_interfaces = source["public_interfaces"];
+	        this.public_functions = source["public_functions"];
+	        this.public_methods = source["public_methods"];
+	        this.public_variables = source["public_variables"];
+	        this.public_constants = source["public_constants"];
+	        this.num_packages = source["num_packages"];
+	        this.total_loc = source["total_loc"];
+	        this.interface_avg_size = source["interface_avg_size"];
+	        this.interface_max_size = source["interface_max_size"];
+	        this.interface_min_size = source["interface_min_size"];
+	        this.comments_total_lines = source["comments_total_lines"];
+	        this.comments_lines_ratio = source["comments_lines_ratio"];
+	        this.files_with_comments = source["files_with_comments"];
+	        this.files_with_comments_ratio = source["files_with_comments_ratio"];
+	    }
+	}
+	export class HistoricalMetrics {
+	    date: string;
+	    commit: string;
+	    metrics: Metrics;
+
+	    static createFrom(source: any = {}) {
+	        return new HistoricalMetrics(source);
+	    }
+
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.date = source["date"];
+	        this.commit = source["commit"];
+	        this.metrics = this.convertValues(source["metrics"], Metrics);
+	    }
+
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
+	}
+
 	export class Project {
 	    id: string;
 	    name: string;
 	    path: string;
 	    package: string;
 	    organization_packages: string[];
+	    historical_metrics: HistoricalMetrics[];
 
 	    static createFrom(source: any = {}) {
 	        return new Project(source);
@@ -417,7 +507,26 @@ export namespace storage {
 	        this.path = source["path"];
 	        this.package = source["package"];
 	        this.organization_packages = source["organization_packages"];
+	        this.historical_metrics = this.convertValues(source["historical_metrics"], HistoricalMetrics);
 	    }
+
+		convertValues(a: any, classs: any, asMap: boolean = false): any {
+		    if (!a) {
+		        return a;
+		    }
+		    if (a.slice) {
+		        return (a as any[]).map(elem => this.convertValues(elem, classs));
+		    } else if ("object" === typeof a) {
+		        if (asMap) {
+		            for (const key of Object.keys(a)) {
+		                a[key] = new classs(a[key]);
+		            }
+		            return a;
+		        }
+		        return new classs(a);
+		    }
+		    return a;
+		}
 	}
 	export class ProjectList {
 	    projects: Project[];

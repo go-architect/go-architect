@@ -1,16 +1,7 @@
 <script lang="ts" setup>
-const props = defineProps(['data'])
 
-const previousData = {
-  packages: 10,
-  source_files: 12,
-  structs: 5,
-  interfaces: 0,
-  functions: 7,
-  methods: 3,
-  variables: 7,
-  constants: 38
-}
+const props = defineProps(['data', 'previous'])
+
 const resolveIcon = (current: number, previous:number): string => {
   if (current == previous) {
     return "fa-solid fa-circle"
@@ -30,6 +21,7 @@ const resolveStyle = (current: number, previous:number): string => {
   return "color: #df0707;"
 }
 const resolveHint = (current: number, previous:number): string => {
+  console.log("current: " + current, "previous: "+previous, `-${previous-current} since last analysis`)
   if (current == previous) {
     return "No changes since last analysis"
   }
@@ -44,6 +36,12 @@ const resolveHint = (current: number, previous:number): string => {
   <div class="card card-primary card-outline">
     <div class="card-header">
       <h3 class="card-title">Types</h3>
+      <div class="text-right">
+        <div class="btn btn-sm btn-default action" title="View Metrics Chart"
+             data-toggle="modal" data-target="#modal-types-metrics-chart">
+          <i class="fa-solid fa-chart-line"></i>
+        </div>
+      </div>
     </div>
     <div class="card-body">
       <div v-if="props.data == undefined" class="overlay-wrapper">
@@ -58,10 +56,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Packages</b>
           <div class="float-right">
             {{ props.data.packages.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.packages, previousData.packages)"
-              :style="resolveStyle(props.data.packages, previousData.packages)"
-              :title="resolveHint(props.data.packages, previousData.packages)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.packages, props.previous.num_packages)"
+              :style="resolveStyle(props.data.packages, props.previous.num_packages)"
+              :title="resolveHint(props.data.packages, props.previous.num_packages)"
             ></i>
           </div>
         </li>
@@ -69,10 +67,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Source Files</b>
           <div class="float-right">
             {{ props.data.source_files.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.source_files, previousData.source_files)"
-              :style="resolveStyle(props.data.source_files, previousData.source_files)"
-              :title="resolveHint(props.data.source_files, previousData.source_files)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.source_files, props.previous.source_files)"
+              :style="resolveStyle(props.data.source_files, props.previous.source_files)"
+              :title="resolveHint(props.data.source_files, props.previous.source_files)"
             ></i>
           </div>
         </li>
@@ -80,10 +78,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Structs</b>
           <div class="float-right">
             {{ props.data.structs.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.structs, previousData.structs)"
-              :style="resolveStyle(props.data.structs, previousData.structs)"
-              :title="resolveHint(props.data.structs, previousData.structs)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.structs, props.previous.structs)"
+              :style="resolveStyle(props.data.structs, props.previous.structs)"
+              :title="resolveHint(props.data.structs, props.previous.structs)"
             ></i>
           </div>
         </li>
@@ -91,10 +89,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Interfaces</b>
           <div class="float-right">
             {{ props.data.interfaces.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.interfaces, previousData.interfaces)"
-              :style="resolveStyle(props.data.interfaces, previousData.interfaces)"
-              :title="resolveHint(props.data.interfaces, previousData.interfaces)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.interfaces, props.previous.interfaces)"
+              :style="resolveStyle(props.data.interfaces, props.previous.interfaces)"
+              :title="resolveHint(props.data.interfaces, props.previous.interfaces)"
             ></i>
           </div>
         </li>
@@ -102,10 +100,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Functions</b>
           <div class="float-right">
             {{ props.data.functions.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.functions, previousData.functions)"
-              :style="resolveStyle(props.data.functions, previousData.functions)"
-              :title="resolveHint(props.data.functions, previousData.functions)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.functions, props.previous.functions)"
+              :style="resolveStyle(props.data.functions, props.previous.functions)"
+              :title="resolveHint(props.data.functions, props.previous.functions)"
             ></i>
           </div>
         </li>
@@ -113,10 +111,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Methods</b>
           <div class="float-right">
             {{ props.data.methods.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.methods, previousData.methods)"
-              :style="resolveStyle(props.data.methods, previousData.methods)"
-              :title="resolveHint(props.data.methods, previousData.methods)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.methods, props.previous.methods)"
+              :style="resolveStyle(props.data.methods, props.previous.methods)"
+              :title="resolveHint(props.data.methods, props.previous.methods)"
             ></i>
           </div>
         </li>
@@ -124,10 +122,10 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Variables</b>
           <div class="float-right">
             {{ props.data.variables.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.variables, previousData.variables)"
-              :style="resolveStyle(props.data.variables, previousData.variables)"
-              :title="resolveHint(props.data.variables, previousData.variables)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.variables, props.previous.variables)"
+              :style="resolveStyle(props.data.variables, props.previous.variables)"
+              :title="resolveHint(props.data.variables, props.previous.variables)"
             ></i>
           </div>
         </li>
@@ -135,14 +133,33 @@ const resolveHint = (current: number, previous:number): string => {
           <b>Constants</b>
           <div class="float-right">
             {{ props.data.constants.toLocaleString('en-us', {}) }}
-            <i v-if="previousData != undefined"
-              :class="resolveIcon(props.data.constants, previousData.constants)"
-              :style="resolveStyle(props.data.constants, previousData.constants)"
-              :title="resolveHint(props.data.constants, previousData.constants)"
+            <i v-if="props.previous != undefined"
+              :class="resolveIcon(props.data.constants, props.previous.constants)"
+              :style="resolveStyle(props.data.constants, props.previous.constants)"
+              :title="resolveHint(props.data.constants, props.previous.constants)"
             ></i>
           </div>
         </li>
       </ul>
+    </div>
+  </div>
+
+  <div class="modal fade" id="modal-types-metrics-chart" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Type Metrics Chart</h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          Hola
+        </div>
+        <div class="modal-footer justify-content-between">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
