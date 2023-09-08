@@ -19,7 +19,6 @@
         </li>
         <li class="list-group-item">
           <div class="inner-details">
-
             <div v-for="pkgCoupling in result?.details" class="card card-outline card-default collapsed-card">
               <div class="card-header">
                 <h3 class="card-title bold">
@@ -45,12 +44,14 @@
                         {{ fileCoupling.file }}
                       </h3>
                       <div class="card-tools">
-                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Open Details">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" v-on:click="openWidget" title="Open Details">
                           <i class="fas fa-plus"></i>
                         </button>
                       </div>
                     </div>
                     <div class="card-body" style="display: none;">
+                      <pre class="lang-go line-numbers" :data-line=resolveLines(fileCoupling.coupling_lines) v-on:load="openWidget"><code>{{ fileCoupling.file_content }}</code></pre>
+                      <!--
                       <div class="inner-details">
                         <table class="coupling table table-bordered">
                           <thead>
@@ -64,9 +65,13 @@
                             <td style="text-align: center;">{{ d.line}}</td>
                             <td>{{  d.details }}</td>
                           </tr>
+                          <tr>
+                            <td colspan="2">Hola!</td>
+                          </tr>
                           </tbody>
                         </table>
                       </div>
+                      -->
                     </div>
                   </div>
                 </div>
@@ -82,7 +87,15 @@
 <script lang="ts">
 import {PropType} from "vue";
 import {coupling} from "../../../../../wailsjs/go/models";
-import {BrowserOpenURL} from "../../../../../wailsjs/runtime";
+
+import 'prismjs';
+import 'prismjs/themes/prism.css';
+import 'prismjs/plugins/line-numbers/prism-line-numbers';
+import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
+import 'prismjs/plugins/line-highlight/prism-line-highlight';
+import 'prismjs/plugins/line-highlight/prism-line-highlight.css';
+import 'prismjs/components/prism-go';
+import Prism from "prismjs";
 
 export default {
   name: "DependencyCouplingDetails",
@@ -93,9 +106,15 @@ export default {
     }
   },
   methods: {
-    openDetails(pkg: string) {
-      console.log("Open Details for: " + pkg)
+    openWidget(){
+      setTimeout(() => Prism.highlightAll(), 1000)
+    },
+    resolveLines(coupling_lines: number[]) {
+      return coupling_lines.join(",")
     }
+  },
+  async mounted() {
+    Prism.highlightAll();
   }
 }
 </script>

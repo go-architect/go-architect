@@ -40,6 +40,8 @@ export namespace coupling {
 	export class FileCoupling {
 	    package: string;
 	    file: string;
+	    file_content: string;
+	    coupling_lines: number[];
 	    coupling_level: number;
 	    details: Detail[];
 
@@ -51,6 +53,8 @@ export namespace coupling {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package = source["package"];
 	        this.file = source["file"];
+	        this.file_content = source["file_content"];
+	        this.coupling_lines = source["coupling_lines"];
 	        this.coupling_level = source["coupling_level"];
 	        this.details = this.convertValues(source["details"], Detail);
 	    }
