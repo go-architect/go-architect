@@ -40,14 +40,38 @@ jobs:
       - name: Create Go Architect DMG
         run: appdmg appdmg.json "Go-Architect-${{github.ref_name}}.dmg"
 
-#      - name: Create Go Architect DMG
-#        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
+      #      - name: Create Go Architect DMG
+      #        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
       - name: Save DMG Image in workspace
         uses: actions/upload-artifact@v3
         with:
           name: "Go-Architect-${{github.ref_name}}.dmg"
           path: "Go-Architect-${{github.ref_name}}.dmg"
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - name: Check Wails Version
+        run: wails version
+      - name: Build Go Architect AMD64
+        run: wails build -platform=linux/amd64 -o Linux-AMD64-${{github.ref_name}}
+      - name: Build Go Architect ARM64
+        run: wails build -platform=linux/arm64 -o Linux-ARM64-${{github.ref_name}}
+      - name: Check Build
+        run: ls -la /home/runner/work/go-architect/go-architect
 
   changelog:
     needs: build-macos
