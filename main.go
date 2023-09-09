@@ -13,6 +13,7 @@ import (
 	"path"
 	"path/filepath"
 	goRuntime "runtime"
+	"fmt"
 )
 
 //go:embed all:frontend/dist
@@ -71,15 +72,20 @@ func main() {
 }
 
 func checkForLoggingFile(filename string) {
+	fmt.Printf("Filename: %s\n", filename)
 	dir := path.Dir(filename)
+	fmt.Printf("Dir: %s\n", dir)
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err = os.Mkdir(dir, 0755)
+		fmt.Printf("MkDir(error): %+v\n", err)
 		if err != nil {
 			panic(err)
 		}
 	}
 	if _, err := os.Stat(filename); os.IsNotExist(err) {
+		fmt.Printf("FileStat(error): %+v\n", err)
 		_, err = os.Create(filename)
+		fmt.Printf("CreateFile(error): %+v\n", err)
 		if err != nil {
 			panic(err)
 		}
