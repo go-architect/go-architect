@@ -1,0 +1,34 @@
+name: Linux Workflow
+
+on:
+  push:
+    branches: [ linux-build ]
+  pull_request:
+    branches: [ linux-build ]
+
+jobs:
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install requirements
+        run: sudo apt-get install -y gtk+-3.0 webkit2gtk-4.0 gio-unix-2.0 gtk+-3.0 webkit2gtk-4.0 gio-unix-2.0 gtk+-3.0 webkit2gtk-4.0
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: Install Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+      - name: Check Wails Version
+        run: wails version
+      - name: Build Go Architect AMD64
+        run: wails build -platform=linux/amd64 -o Linux-AMD64-${{github.ref_name}}
+      - name: Build Go Architect ARM64
+        run: wails build -platform=linux/arm64 -o Linux-ARM64-${{github.ref_name}}
+      - name: Check Build
+        run: ls -la /home/runner/work/go-architect/go-architect
