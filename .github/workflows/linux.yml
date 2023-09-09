@@ -23,3 +23,5 @@ jobs:
           build-platform: ${{ matrix.build.platform }}
       - name: Check Build
         run: ls -la /home/runner/work/go-architect/go-architect
+      - name: Check Build
+        run: ls -la /home/runner/work/go-architect/go-architect/build
