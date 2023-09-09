@@ -1,36 +1,25 @@
-name: Linux Workflow
+name: Wails build
 
-on:
-  push:
-    branches: [ linux-build ]
-  pull_request:
-    branches: [ linux-build ]
+on: [push, pull_request]
 
 jobs:
-  build-linux:
-    runs-on: ubuntu-latest
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        build: [
+          {name: wailsTest, platform: linux/amd64, os: ubuntu-latest},
+          {name: wailsTest, platform: windows/amd64, os: windows-latest},
+          {name: wailsTest, platform: darwin/universal, os: macos-latest}
+        ]
+    runs-on: ${{ matrix.build.os }}
     steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Install requirements
-        run: sudo apt-get install -y gtk+-3.0 webkit2gtk-4.0
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v4
+      - uses: actions/checkout@v2
         with:
-          go-version: 1.19
-      - name: Set up Node
-        uses: actions/setup-node@v3
+          submodules: recursive
+      - uses: dAppServer/wails-build-action@v2.2
         with:
-          node-version: 16
-      - name: Install Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Check Wails Version
-        run: wails version
-      - name: Build Go Architect ARM64
-        run: wails build -platform=linux/arm64 -o Linux-${{github.ref_name}}-arm64
+          build-name: ${{ matrix.build.name }}
+          build-platform: ${{ matrix.build.platform }}
       - name: Check Build
         run: ls -la /home/runner/work/go-architect/go-architect
