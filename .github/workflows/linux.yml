@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install requirements
-        run: sudo apt-get install -y gtk+-3.0 webkit2gtk-4.0 gio-unix-2.0 gtk+-3.0 webkit2gtk-4.0 gio-unix-2.0 gtk+-3.0 webkit2gtk-4.0
+        run: sudo apt-get install -y gtk+-3.0 webkit2gtk-4.0
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up Go
