@@ -1,6 +1,8 @@
 name: Release Workflow
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
     tags:
       - "v*.*.*"
@@ -31,87 +33,36 @@ jobs:
       - name: Build Go Architect
         run: wails build -platform=darwin/arm64
 
-      - name: Install node-appdmg
-        run: npm install -g appdmg
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.7.1
+        with:
+          type: 'zip'
+          filename: "Go-Architect-version.zip"
+          directory: /Users/runner/work/go-architect/go-architect/build/bin
 
-      - name: Install Create-DMG
-        run: brew install create-dmg
+      - name: Check Build
+        run: ls -la /Users/runner/work/go-architect/go-architect/build/bin
 
-      - name: Create Go Architect DMG
-        run: appdmg appdmg.json "Go-Architect-${{github.ref_name}}.dmg"
+#      - name: Install node-appdmg
+#        run: npm install -g appdmg
+
+#      - name: Install Create-DMG
+#        run: brew install create-dmg
+
+#      - name: Create Go Architect DMG
+#        run: appdmg appdmg.json "Go-Architect-${{github.ref_name}}.dmg"
 
       #      - name: Create Go Architect DMG
       #        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
-      - name: Save DMG Image in workspace
+#      - name: Save DMG Image in workspace
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: "Go-Architect-${{github.ref_name}}.dmg"
+#          path: "Go-Architect-${{github.ref_name}}.dmg"
+
+      - name: Save Zip File in workspace
         uses: actions/upload-artifact@v3
         with:
-          name: "Go-Architect-${{github.ref_name}}.dmg"
-          path: "Go-Architect-${{github.ref_name}}.dmg"
-
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.19
-      - name: Set up Node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
-      - name: Install Wails
-        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
-      - name: Check Wails Version
-        run: wails version
-      - name: Build Go Architect AMD64
-        run: wails build -platform=linux/amd64 -o Linux-AMD64-${{github.ref_name}}
-      - name: Build Go Architect ARM64
-        run: wails build -platform=linux/arm64 -o Linux-ARM64-${{github.ref_name}}
-      - name: Check Build
-        run: ls -la /home/runner/work/go-architect/go-architect
-
-  changelog:
-    needs: build-macos
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - name: Get tags
-        run: git fetch --tags origin
-      - name: Release Notes
-        run: git log $(git describe --tags --abbrev=0 ${{github.ref_name}}^)..HEAD --pretty=format:'%h - %s' > CHANGELOG.txt
-      - name: Save Release Notes in workspace
-        uses: actions/upload-artifact@v3
-        with:
-          name: CHANGELOG.txt
-          path: CHANGELOG.txt
-
-  release:
-    needs: [build-macos, changelog]
-    permissions:
-      contents: write
-      discussions: write
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-      - name: Restore DMG Image
-        uses: actions/download-artifact@v3
-        with:
-          name: "Go-Architect-${{github.ref_name}}.dmg"
-      - name: Restore Release Notes
-        uses: actions/download-artifact@v3
-        with:
-          name: CHANGELOG.txt
-      - name: Check Release Files
-        run: ls -la /home/runner/work/go-architect/go-architect
-      - name: Release
-        uses: softprops/action-gh-release@v1
-        with:
-          body_path: CHANGELOG.txt
-          files: "Go-Architect-${{github.ref_name}}.dmg"
+          name: "Go-Architect-version.zip"
+          path: "/Users/runner/work/go-architect/go-architect/build/bin/Go-Architect-version.zip"

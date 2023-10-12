@@ -9,6 +9,33 @@
       </div>
     </div>
     <div class="card-body">
+      <div class="legend">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th colspan="2">Legend</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td class="dsm-cell internal-package"></td>
+            <td class="xxxx">Internal Packages</td>
+          </tr>
+          <tr>
+            <td class="dsm-cell organization-package"></td>
+            <td class="xxxx">Organization Packages</td>
+          </tr>
+          <tr>
+            <td class="dsm-cell external-package"></td>
+            <td class="xxxx">External Packages</td>
+          </tr>
+          <tr>
+            <td class="dsm-cell standard-package"></td>
+            <td class="xxxx">Standard Packages</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <div v-if="dsm.length === 0" class="overlay-wrapper" style="height: 300px;">
         <div class="overlay">
           <i class="fas fa-3x fa-sync-alt fa-spin"></i>
@@ -19,15 +46,15 @@
         <table class="table table-responsive table-bordered">
           <thead>
           <tr>
-            <th>Package</th>
             <th class="package-id">#</th>
+            <th>Package</th>
             <th v-for="(p, idx) in dsm" class="package-id" :title=p[0]>{{ idx+1 }}</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(p, idx) in dsm">
-            <td class="package-name" :title=p[0]>{{ wrapPackageName(p[0], mainPackage) }}</td>
             <td class="package-id" :title=p[0]>{{ idx+1 }}</td>
+            <td class="package-name" :title=p[0] :class="resolvePackageClass(p)">{{ wrapPackageName(p[0], mainPackage) }}</td>
             <td v-for="idx2 in p.length-1" :class="resolveClasses(p, idx, idx2)">
               {{(idx===idx2-1) ? "": displayValue(p[idx2])}}
             </td>
@@ -54,6 +81,7 @@ export default defineComponent({
     return {
       mainPackage: "",
       dsm: [] as string[][],
+      orgPackages: [] as string[],
     }
   },
   methods: {
@@ -68,15 +96,50 @@ export default defineComponent({
       if(value!=="0") return value;
       return "";
     },
+    isOrganizationPackage(pkg: string) {
+//      console.log("checkPackage: ", pkg, this.orgPackages, pkg.startsWith(this.orgPackages[0]), this.orgPackages.some(op => pkg.startsWith(op)))
+      return this.orgPackages.some(op => pkg.startsWith(op))
+    },
+    resolvePackageClass(p: any) {
+//      console.log("OrgPackages: ", this.orgPackages)
+//      console.log("package: ", p[0], this.isOrganizationPackage(p[0]))
+      const classes = [];
+      if(p[0].startsWith(this.mainPackage)) {
+        classes.push("internal-package")
+      } else if(this.isOrganizationPackage(p[0])){
+        console.log("OKKKKKKKKKKK", p[0])
+        classes.push("organization-package")
+      } else if(p[0].startsWith("golang.org/x")) {
+        classes.push("standard-package")
+      } else if(!p[0].includes(".")) {
+        classes.push("standard-package")
+      } else {
+        classes.push("external-package")
+      }
+      return classes
+    },
     resolveClasses(p: any, idx1: number, idx2: number) {
       const classes = [];
+      if(p[0].startsWith(this.mainPackage) && this.dsm[idx2-1][0].startsWith(this.mainPackage)){
+        classes.push("internal-package")
+      } else if(this.isOrganizationPackage(p[0]) && idx2<=idx1){
+        classes.push("organization-package")
+      } else if(this.isOrganizationPackage(this.dsm[idx2-1][0]) && idx1<idx2){
+        classes.push("organization-package")
+      } else if(p[0].startsWith("golang.org/x") || this.dsm[idx2-1][0].startsWith("golang.org/x")) {
+        classes.push("standard-package")
+      } else if(!p[0].includes(".") || !this.dsm[idx2-1][0].includes(".")) {
+        classes.push("standard-package")
+      } else {
+        classes.push("external-package")
+      }
+      classes.push("dsm-cell")
       if(idx1===idx2-1){
         classes.push("same-package")
       }
       if(p[idx2]>0){
         classes.push("dependency")
       }
-      classes.push("dsm-cell")
       return classes.join(" ")
     },
     wrapPackageName(p: string, mainPackage: string) {
@@ -90,6 +153,7 @@ export default defineComponent({
     const dsm = await GetDSM(project!)
     this.dsm = this.mapToViewModel(dsm)
     this.mainPackage = project?.package!
+    this.orgPackages = project?.organization_packages ? project?.organization_packages! : []
   }
 })
 </script>
@@ -116,9 +180,26 @@ export default defineComponent({
   height: 20px;
 }
 .same-package {
-  background-color: #dddddd;
+  background-color: #dddddd !important;
 }
 .dependency {
-   background-color: #ffebbb;
+   background-color: #BEC1DB !important;
+  font-weight: bolder;
  }
+.internal-package {
+  background-color: #EDF9FF;
+}
+.organization-package {
+  background-color: #E7FEE2;
+}
+.external-package {
+  background-color: #FEF4F4;
+}
+.standard-package {
+  background-color: #FFFBDB;
+}
+.legend {
+  font-size: 10px;
+  width: 200px;
+}
 </style>
