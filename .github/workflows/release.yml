@@ -37,7 +37,7 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: "Go-Architect-version"
+          filename: "Go-Architect-version.zip"
           directory: /Users/runner/work/go-architect/go-architect/build/bin
 
 
