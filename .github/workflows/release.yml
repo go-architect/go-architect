@@ -40,6 +40,8 @@ jobs:
           filename: "Go-Architect-version.zip"
           directory: /Users/runner/work/go-architect/go-architect/build/bin
 
+      - name: Check Build
+        run: ls -la /Users/runner/work/go-architect/go-architect/build/bin
 
 #      - name: Install node-appdmg
 #        run: npm install -g appdmg
@@ -63,4 +65,4 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: "Go-Architect-version.zip"
-          path: "Go-Architect-version.zip"
+          path: "/Users/runner/work/go-architect/go-architect/build/bin/Go-Architect-version.zip"
