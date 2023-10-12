@@ -1,6 +1,8 @@
 name: Release Workflow
 
 on:
+  pull_request:
+    branches: [ main ]
   push:
     tags:
       - "v*.*.*"
