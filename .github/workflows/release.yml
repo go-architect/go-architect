@@ -31,27 +31,40 @@ jobs:
       - name: Build Go Architect
         run: wails build -platform=darwin/arm64
 
-      - name: Install node-appdmg
-        run: npm install -g appdmg
+      - name: Zip Go-Architect App
+        uses: montudor/action-zip@v1
+        with:
+          args: zip -qq -r "Go-Architect-${{github.ref_name}}.zip" /Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app
 
-      - name: Install Create-DMG
-        run: brew install create-dmg
+#      - name: Install node-appdmg
+#        run: npm install -g appdmg
 
-      - name: Create Go Architect DMG
-        run: appdmg appdmg.json "Go-Architect-${{github.ref_name}}.dmg"
+#      - name: Install Create-DMG
+#        run: brew install create-dmg
+
+#      - name: Create Go Architect DMG
+#        run: appdmg appdmg.json "Go-Architect-${{github.ref_name}}.dmg"
 
       #      - name: Create Go Architect DMG
       #        run: create-dmg "Go-Architect-${{github.ref_name}}.dmg" "/Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app/"
 
-      - name: Save DMG Image in workspace
+#      - name: Save DMG Image in workspace
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: "Go-Architect-${{github.ref_name}}.dmg"
+#          path: "Go-Architect-${{github.ref_name}}.dmg"
+
+      - name: Save Zip File in workspace
         uses: actions/upload-artifact@v3
         with:
-          name: "Go-Architect-${{github.ref_name}}.dmg"
-          path: "Go-Architect-${{github.ref_name}}.dmg"
+          name: "Go-Architect-${{github.ref_name}}.zip"
+          path: "Go-Architect-${{github.ref_name}}.zip"
 
   build-linux:
     runs-on: ubuntu-latest
     steps:
+      - name: Install requirements
+        run: sudo apt-get install -y gtk+-3.0 webkit2gtk-4.0 gio-unix-2.0 gtk+-3.0 webkit2gtk-4.0 gio-unix-2.0 gtk+-3.0 webkit2gtk-4.0
       - name: Checkout
         uses: actions/checkout@v3
       - name: Set up Go

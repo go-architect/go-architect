@@ -104,7 +104,7 @@ function displayToast(type: string, message: string) {
 <template>
   <div class="card">
     <div class="card-header ui-sortable-handle" style="cursor: move;">
-      <h3 class="card-title">Registered Projects</h3>
+      <h3 class="card-title">My Projects</h3>
       <div class="card-tools">
         <div class="btn btn-block btn-default btn-xs add-project" data-toggle="modal" data-target="#modal-create-project">
           <i class="fa fa-circle-plus"></i> Add Project
