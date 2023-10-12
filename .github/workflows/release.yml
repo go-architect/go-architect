@@ -33,10 +33,12 @@ jobs:
       - name: Build Go Architect
         run: wails build -platform=darwin/arm64
 
-      - name: Zip Go-Architect App
-        uses: montudor/action-zip@v1
+      - name: Zip Release
+        uses: TheDoctor0/zip-release@0.7.1
         with:
-          args: zip -qq -r "Go-Architect-${{github.ref_name}}.zip" /Users/runner/work/go-architect/go-architect/build/bin/Go Architect.app
+          type: 'zip'
+          filename: "Go-Architect-${{github.ref_name}}.zip"
+          path: /Users/runner/work/go-architect/go-architect/build/bin
 
 #      - name: Install node-appdmg
 #        run: npm install -g appdmg
