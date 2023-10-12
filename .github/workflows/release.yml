@@ -37,7 +37,7 @@ jobs:
         uses: TheDoctor0/zip-release@0.7.1
         with:
           type: 'zip'
-          filename: "Go-Architect-${{github.ref_name}}.zip"
+          filename: "Go-Architect-version.zip"
           path: /Users/runner/work/go-architect/go-architect/build/bin
 
 #      - name: Install node-appdmg
