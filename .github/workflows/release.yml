@@ -62,5 +62,5 @@ jobs:
       - name: Save Zip File in workspace
         uses: actions/upload-artifact@v3
         with:
-          name: "Go-Architect-version"
-          path: "Go-Architect-version"
+          name: "Go-Architect-version.zip"
+          path: "Go-Architect-version.zip"
