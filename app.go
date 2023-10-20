@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/fdaines/go-architect/backend/storage"
+	"github.com/go-architect/go-architect/backend/storage"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	exec "golang.org/x/sys/execabs"
 	"os"
