@@ -19,6 +19,7 @@ build/bin
 frontend/dist/assets
 frontend/dist/images
 frontend/node_modules
+frontend/package.json.md5
 sample_db
 
 .DS_Store
