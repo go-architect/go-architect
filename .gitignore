@@ -16,9 +16,10 @@
 
 .idea/
 build/bin
-frontend/dist/assets
-frontend/dist/images
+frontend/dist/assets/*
+frontend/dist/index.html
 frontend/node_modules
+frontend/package.json.md5
 sample_db
 
 .DS_Store

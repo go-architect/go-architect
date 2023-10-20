@@ -1,15 +1,15 @@
 export namespace comments {
-
+	
 	export class CommentsMetrics {
 	    total_lines: number;
 	    ratio: number;
 	    files_with_comments: number;
 	    files_with_comments_ratio: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new CommentsMetrics(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.total_lines = source["total_lines"];
@@ -22,15 +22,15 @@ export namespace comments {
 }
 
 export namespace coupling {
-
+	
 	export class Detail {
 	    line: number;
 	    details: string;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new Detail(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.line = source["line"];
@@ -44,11 +44,11 @@ export namespace coupling {
 	    coupling_lines: number[];
 	    coupling_level: number;
 	    details: Detail[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new FileCoupling(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package = source["package"];
@@ -58,7 +58,7 @@ export namespace coupling {
 	        this.coupling_level = source["coupling_level"];
 	        this.details = this.convertValues(source["details"], Detail);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -81,18 +81,18 @@ export namespace coupling {
 	    package: string;
 	    coupling_level: number;
 	    details: FileCoupling[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new PackageCoupling(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package = source["package"];
 	        this.coupling_level = source["coupling_level"];
 	        this.details = this.convertValues(source["details"], FileCoupling);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -115,18 +115,18 @@ export namespace coupling {
 	    dependency: string;
 	    coupling_level: number;
 	    details: PackageCoupling[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new DependencyCoupling(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.dependency = source["dependency"];
 	        this.coupling_level = source["coupling_level"];
 	        this.details = this.convertValues(source["details"], PackageCoupling);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -149,7 +149,7 @@ export namespace coupling {
 }
 
 export namespace dependency {
-
+	
 	export class ModuleDependencyGraph {
 	    module: string;
 	    internal: string[];
@@ -157,11 +157,11 @@ export namespace dependency {
 	    organization: string[];
 	    standard: string[];
 	    relations: {[key: string]: string[]};
-
+	
 	    static createFrom(source: any = {}) {
 	        return new ModuleDependencyGraph(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.module = source["module"];
@@ -176,16 +176,16 @@ export namespace dependency {
 }
 
 export namespace dsm {
-
+	
 	export class DependencyStructureMatrix {
 	    module: string;
 	    packages: string[];
 	    dependencies: number[][];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new DependencyStructureMatrix(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.module = source["module"];
@@ -197,14 +197,14 @@ export namespace dsm {
 }
 
 export namespace gocyclo {
-
+	
 	export class GoCycloOutput {
 	    average_complexity: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new GoCycloOutput(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.average_complexity = source["average_complexity"];
@@ -214,7 +214,7 @@ export namespace gocyclo {
 }
 
 export namespace instability {
-
+	
 	export class PackageInstability {
 	    package_name: string;
 	    abstractions_count: number;
@@ -224,11 +224,11 @@ export namespace instability {
 	    instability: number;
 	    abstractness: number;
 	    distance: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new PackageInstability(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package_name = source["package_name"];
@@ -245,17 +245,17 @@ export namespace instability {
 }
 
 export namespace interfaces {
-
+	
 	export class InterfaceInfo {
 	    package: string;
 	    file: string;
 	    name: string;
 	    methods: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new InterfaceInfo(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package = source["package"];
@@ -268,18 +268,18 @@ export namespace interfaces {
 	    average_methods: number;
 	    max_methods: InterfaceInfo[];
 	    min_methods: InterfaceInfo[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new InterfaceMetrics(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.average_methods = source["average_methods"];
 	        this.max_methods = this.convertValues(source["max_methods"], InterfaceInfo);
 	        this.min_methods = this.convertValues(source["min_methods"], InterfaceInfo);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -302,16 +302,16 @@ export namespace interfaces {
 }
 
 export namespace loc {
-
+	
 	export class FileLOC {
 	    package: string;
 	    file: string;
 	    loc: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new FileLOC(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package = source["package"];
@@ -322,11 +322,11 @@ export namespace loc {
 	export class PackageLOC {
 	    package: string;
 	    loc: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new PackageLOC(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.package = source["package"];
@@ -337,18 +337,18 @@ export namespace loc {
 	    total: number;
 	    packages: PackageLOC[];
 	    files: FileLOC[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new ProjectLOC(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.total = source["total"];
 	        this.packages = this.convertValues(source["packages"], PackageLOC);
 	        this.files = this.convertValues(source["files"], FileLOC);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -371,17 +371,17 @@ export namespace loc {
 }
 
 export namespace project {
-
+	
 	export class ProjectInfo {
 	    name: string;
 	    path: string;
 	    package: string;
 	    organization_packages: string[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new ProjectInfo(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.name = source["name"];
@@ -394,18 +394,18 @@ export namespace project {
 }
 
 export namespace repository {
-
+	
 	export class RepositoryInfo {
 	    path: string;
 	    url: string;
 	    branch: string;
 	    revision: string;
 	    is_up_to_date: boolean;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new RepositoryInfo(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.path = source["path"];
@@ -419,7 +419,7 @@ export namespace repository {
 }
 
 export namespace storage {
-
+	
 	export class Metrics {
 	    source_files: number;
 	    structs: number;
@@ -445,11 +445,11 @@ export namespace storage {
 	    files_with_comments_ratio: number;
 	    cyclomatic_complexity_avg: number;
 	    cognitive_complexity_avg: number;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new Metrics(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.source_files = source["source_files"];
@@ -482,18 +482,18 @@ export namespace storage {
 	    date: string;
 	    commit: string;
 	    metrics: Metrics;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new HistoricalMetrics(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.date = source["date"];
 	        this.commit = source["commit"];
 	        this.metrics = this.convertValues(source["metrics"], Metrics);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -512,7 +512,7 @@ export namespace storage {
 		    return a;
 		}
 	}
-
+	
 	export class Project {
 	    id: string;
 	    name: string;
@@ -520,11 +520,11 @@ export namespace storage {
 	    package: string;
 	    organization_packages: string[];
 	    historical_metrics: HistoricalMetrics[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new Project(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.id = source["id"];
@@ -534,7 +534,7 @@ export namespace storage {
 	        this.organization_packages = source["organization_packages"];
 	        this.historical_metrics = this.convertValues(source["historical_metrics"], HistoricalMetrics);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -555,16 +555,16 @@ export namespace storage {
 	}
 	export class ProjectList {
 	    projects: Project[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new ProjectList(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.projects = this.convertValues(source["projects"], Project);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -587,7 +587,7 @@ export namespace storage {
 }
 
 export namespace types {
-
+	
 	export class PackageTypes {
 	    source_files: number;
 	    structs: number;
@@ -603,11 +603,11 @@ export namespace types {
 	    public_variables: number;
 	    public_constants: number;
 	    package: string;
-
+	
 	    static createFrom(source: any = {}) {
 	        return new PackageTypes(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.source_files = source["source_files"];
@@ -643,11 +643,11 @@ export namespace types {
 	    project_package: string;
 	    packages: number;
 	    details: PackageTypes[];
-
+	
 	    static createFrom(source: any = {}) {
 	        return new ProjectTypes(source);
 	    }
-
+	
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.source_files = source["source_files"];
@@ -667,7 +667,7 @@ export namespace types {
 	        this.packages = source["packages"];
 	        this.details = this.convertValues(source["details"], PackageTypes);
 	    }
-
+	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
 		    if (!a) {
 		        return a;
@@ -688,3 +688,4 @@ export namespace types {
 	}
 
 }
+
