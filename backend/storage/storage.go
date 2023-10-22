@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path"
 	"path/filepath"
 )
 
@@ -57,8 +58,16 @@ func RemoveSelectedProject() {
 	os.Remove(dbFile)
 }
 
-func writeEmptyList(filepath string) {
+func writeEmptyList(filename string) {
+	dir := path.Dir(filename)
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err = os.Mkdir(dir, 0755)
+		if err != nil {
+			panic(err)
+		}
+	}
 	var emptyList ProjectList
+	emptyList.Projects = []Project{}
 	jsonData, _ := json.Marshal(emptyList)
-	os.WriteFile(filepath, jsonData, 0755)
+	os.WriteFile(filename, jsonData, 0755)
 }

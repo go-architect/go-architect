@@ -18,7 +18,7 @@ const data = reactive({
 })
 
 onMounted(async () => {
-  data.projects = (await getProjectsList()).projects
+  data.projects = (await getProjectsList()).projects || []
 })
 
 function openDirectorySelectionDialog() {
@@ -48,6 +48,7 @@ function createProject() {
     saveProject(projectInfo)
   }).catch((error: any) => {
     console.log("createProject - Error", error)
+    displayToast("alert", "Cannot Add Go Project")
   })
 }
 
