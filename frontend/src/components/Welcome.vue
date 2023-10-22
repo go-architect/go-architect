@@ -17,7 +17,7 @@ export default {
       <p class="card-text">
         An Architecture Analysis Tool for Golang Projects.
       </p>
-      <a class="card-link" v-on:click="goTo('https://www.go-architect.org')">Browse Documentation</a>
+      <a class="card-link" v-on:click="goTo('https://go-architect.github.io/')">Browse Documentation</a>
       <a class="card-link" v-on:click="goTo('https://www.github.com/go-architect/go-architect')">Github Repository</a>
       <a class="card-link" v-on:click="goTo('https://www.github.com/go-architect/go-architect/issues')">Report an Issue</a>
     </div>
