@@ -32,15 +32,12 @@ export default {
           soon: false
         },
         {
-          title: "Instability & Abtractness",
+          title: "Instability & Abstractness",
           description: "This tool helps understanding the balance between packages that are open to extension and packages that are easy to modify.",
           image: "/images/abstractness.png",
           href:"/instability",
           beta: false,
-          soon: false,
-          onclick: () => {
-            console.log("open Instability & Abstractness Tool")
-          }
+          soon: false
         },
         {
           title: "Dependency Coupling",
