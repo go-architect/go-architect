@@ -53,9 +53,10 @@ jobs:
         run: |
           $GP = (go env GOPATH)
           $env:path = "$env:path;$GP\bin"
-          echo "building on ${{ matrix.os }}"
+          echo "building on windows"
           choco install mingw
-          wails build -platform windows/amd64 -clean
+          CGO_ENABLED=1 wails doctor
+          CGO_ENABLED=1 wails build -platform windows/amd64 -clean
 
       - name: Test Makefile
         run: make install
