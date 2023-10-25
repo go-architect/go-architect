@@ -26,3 +26,7 @@ jobs:
       - name: LS
         run: pwd
         shell: bash
+
+      - name: Find executable
+        run: test -f /d/a/go-architect/go-architect/go-architect.exe
+        shell: bash
