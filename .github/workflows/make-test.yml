@@ -11,13 +11,13 @@ jobs:
         run: env
 
       - name: Show HOMEPATH
-        run: echo %HOMEPATH%
+        run: echo $Env:HOMEPATH
 
       - name: Show HOME
-        run: echo %HOME%
+        run: echo $Env:HOME
 
       - name: Create Go Architect folder
-        run: mkdir %HOMEPATH%\.goarchitect
+        run: mkdir $Env:HOME\.goarchitect
 
       - name: LS
         run: dir
