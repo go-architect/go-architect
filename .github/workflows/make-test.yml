@@ -7,6 +7,9 @@ jobs:
   windows:
     runs-on: windows-2019
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: List
         run: env
 
@@ -28,5 +31,5 @@ jobs:
         shell: bash
 
       - name: Find executable
-        run: test -f /d/a/go-architect/go-architect/go-architect.exe
+        run: test -f /d/a/go-architect/go-architect/go.mod
         shell: bash
