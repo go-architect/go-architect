@@ -30,6 +30,10 @@ jobs:
         run: pwd
         shell: bash
 
-      - name: Find executable
+      - name: Find gomod
         run: test -f /d/a/go-architect/go-architect/go.mod
+        shell: bash
+
+      - name: Find executable
+        run: test -f /d/a/go-architect/go-architect/go-architect.exe
         shell: bash
