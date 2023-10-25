@@ -3,6 +3,9 @@
 wails-build: wails-install
 	CGO_ENABLED=1 wails build -clean
 
+wails-build-windows: wails-install
+	CGO_ENABLED=1 wails build -platform=windows -clean
+
 wails-check: wails-install
 	wails doctor
 
@@ -15,7 +18,7 @@ install-macos: wails-check wails-build
 build-linux: wails-check wails-build
 	@cp build/bin/go-architect .
 
-build-windows: wails-check wails-build
+build-windows: wails-check wails-build-windows
 	@cp build/bin/go-architect.exe .
 
 ifeq ($(OS),Windows_NT)

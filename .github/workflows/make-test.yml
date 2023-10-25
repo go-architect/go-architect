@@ -58,5 +58,8 @@ jobs:
       - name: Check environment
         run: wails doctor
 
-      - name: Build package windows 1
+      - name: Build package windows
         run: wails build -platform=windows
+
+      - name: Test Makefile
+        run: make install
