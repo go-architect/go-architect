@@ -1,7 +1,7 @@
 .PHONY: wails-build wails-check install-macos
 
 wails-build: wails-install
-	wails build -clean
+	CGO_ENABLED=1 wails build -clean
 
 wails-check: wails-install
 	wails doctor
@@ -12,10 +12,7 @@ wails-install:
 install-macos: wails-check wails-build
 	@cp -rf build/bin/Go\ Architect.app /Applications
 
-linux-dependencies:
-	apt install libgtk-3-dev libwebkit2gtk-4.0-dev
-
-build-linux: linux-dependencies wails-check wails-build
+build-linux: wails-check wails-build
 	@cp build/bin/Go\ Architect .
 
 build-windows: wails-check wails-build
