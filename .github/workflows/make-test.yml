@@ -20,4 +20,4 @@ jobs:
         run: mkdir $Env:HOMEPATH\.goarchitect
 
       - name: LS
-        run: dir
+        run: ls
