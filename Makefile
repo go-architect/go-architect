@@ -12,7 +12,10 @@ wails-install:
 install-macos: wails-check wails-build
 	@cp -rf build/bin/Go\ Architect.app /Applications
 
-build-linux: wails-check wails-build
+linux-dependencies:
+	apt install libgtk-3-dev libwebkit2gtk-4.0-dev
+
+build-linux: linux-dependencies wails-check wails-build
 	@cp build/bin/Go\ Architect .
 
 build-windows: wails-check wails-build
