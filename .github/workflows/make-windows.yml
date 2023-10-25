@@ -1,7 +1,7 @@
 name: Test makefile on Windows
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ mainX ]
 
 jobs:
   windows:
