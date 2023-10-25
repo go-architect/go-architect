@@ -55,8 +55,8 @@ jobs:
           $env:path = "$env:path;$GP\bin"
           echo "building on windows"
           choco install mingw
-          CGO_ENABLED=1 wails doctor
-          CGO_ENABLED=1 wails build -platform windows/amd64 -clean
+          wails doctor
+          wails build -platform windows/amd64 -clean
 
       - name: Test Makefile
         run: make install
