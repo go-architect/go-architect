@@ -13,10 +13,10 @@ install-macos: wails-check wails-build
 	@cp -rf build/bin/Go\ Architect.app /Applications
 
 build-linux: wails-check wails-build
-	@cp build/bin/Go\ Architect .
+	@cp build/bin/go-architect .
 
 build-windows: wails-check wails-build
-	@cp build/bin/Go\ Architect.exe .
+	@cp build/bin/go-architect.exe .
 
 ifeq ($(OS),Windows_NT)
     current_os := Windows
