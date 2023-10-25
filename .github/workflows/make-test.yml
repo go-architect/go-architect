@@ -10,28 +10,22 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: List
-        run: env
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: 1.19
 
-      - name: Show HOMEPATH
-        run: echo $Env:HOMEPATH
-
-      - name: Show HOME
-        run: echo $Env:HOME
-
-      - name: Create Go Architect folder
+      - name: Create Go Architect folder1
         run: mkdir $Env:HOMEPATH\.goarchitect
 
-      - name: LS
-        run: ls
-        shell: bash
+      - name: Create Go Architect folder2
+        run: mkdir C:\Users\runneradmin\.goarchitect
 
-      - name: LS
+      - name: Test Makefile
+        run: make install
+
+      - name: PWD
         run: pwd
-        shell: bash
-
-      - name: Find gomod
-        run: test -f /d/a/go-architect/go-architect/go.mod
         shell: bash
 
       - name: Find executable
