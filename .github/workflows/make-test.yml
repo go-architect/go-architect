@@ -9,3 +9,6 @@ jobs:
     steps:
       - name: List
         run: env
+
+      - name: Current Directory
+        run: cd
