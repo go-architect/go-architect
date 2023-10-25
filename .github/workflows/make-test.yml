@@ -43,5 +43,16 @@ jobs:
         with:
           go-version: 1.19
 
+      - name: Get Wails
+        run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
+
+      - name: Build package windows
+        run: |
+          $GP = (go env GOPATH)
+          $env:path = "$env:path;$GP\bin"
+          echo "building on ${{ matrix.os }}"
+          choco install mingw
+          wails build -platform windows/amd64 -clean
+
       - name: Test Makefile
         run: make install
