@@ -20,21 +20,9 @@ jobs:
         run: mkdir $Env:HOMEPATH\.goarchitect
 
       - name: LS
-        run: Get-ChildItem
+        shell: bash
+        run: ls
 
-      - name: LS
-        run: Get-ChildItem .
-
-      - name: Fetch action
-        id: pl
-        uses: Rishabh510/Path-lister-action@master
-        with:
-          path: $Env:HOMEPATH
-#          type: ".yml"
-
-      - name: Output results
-        run: |
-          echo "Found ${{ steps.pl.outputs.path_count }} file(s) with this extension:"
-          for i in ${{ steps.pl.outputs.paths }}; do
-          echo $i
-          done
+      - name: LS 2
+        shell: bash
+        run: ls $Env:HOMEPATH
