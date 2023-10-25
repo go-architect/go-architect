@@ -10,6 +10,12 @@ jobs:
       - name: List
         run: env
 
+      - name: Show HOMEPATH
+        run: echo %HOMEPATH%
+
+      - name: Show HOME
+        run: echo %HOME%
+
       - name: Create Go Architect folder
         run: mkdir %HOMEPATH%\.goarchitect
 
