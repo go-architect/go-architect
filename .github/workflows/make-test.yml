@@ -59,7 +59,7 @@ jobs:
           echo "building on windows"
           choco install mingw --version=11.2.0.07112021
           wails doctor
-          wails build -platform windows/amd64 -clean
+          wails build -platform=windows -clean
 
       - name: Test Makefile
         run: make install
