@@ -17,7 +17,7 @@ jobs:
         run: echo $Env:HOME
 
       - name: Create Go Architect folder
-        run: mkdir $Env:HOME\.goarchitect
+        run: mkdir $Env:HOMEPATH\.goarchitect
 
       - name: LS
         run: dir
