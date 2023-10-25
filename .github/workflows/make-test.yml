@@ -35,6 +35,9 @@ jobs:
       - name: Test Makefile
         run: make install
 
+      - name: Check executable
+        run: ls | grep "^go-architect$"
+
   windows:
     runs-on: windows-latest
     steps:
