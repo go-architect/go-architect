@@ -20,9 +20,9 @@ jobs:
         run: mkdir $Env:HOMEPATH\.goarchitect
 
       - name: LS
-        shell: bash
         run: ls
-
-      - name: LS 2
         shell: bash
-        run: ls $Env:HOMEPATH
+
+      - name: LS
+        run: pwd
+        shell: bash
