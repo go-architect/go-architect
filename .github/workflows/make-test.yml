@@ -52,6 +52,12 @@ jobs:
       - name: Get Wails
         run: go install github.com/wailsapp/wails/v2/cmd/wails@latest
 
+      - name: Check environment
+        run: wails doctor
+
+      - name: Build package windows 1
+        run: wails build -platform=windows
+
       - name: Build package windows
         run: |
           $GP = (go env GOPATH)
