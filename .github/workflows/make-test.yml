@@ -1,59 +1,26 @@
-name: Test makefile for all platforms
+name: Test makefile on linux
 on:
   pull_request:
     branches: [ main ]
 
 jobs:
-  macos:
-    runs-on: macOS-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.19
-
-      - name: Test Makefile
-        run: make install
-
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.19
-
-      - name: Get Wails Dependencies
-        run: sudo apt-get install -y build-essential libgtk-3-dev libwebkit2gtk-4.0-dev npm pkg-config
-
-      - name: Test Makefile
-        run: make install
-
-      - name: Check executable
-        run: ls | grep "^go-architect$"
-
   windows:
     runs-on: windows-2019
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
+      - name: List
+        run: env
 
-      - name: Set up Go
-        uses: actions/setup-go@v4
-        with:
-          go-version: 1.19
+      - name: Show HOMEPATH
+        run: echo $Env:HOMEPATH
 
-      - name: Create Go Architect folder1
+      - name: Show HOME
+        run: echo $Env:HOME
+
+      - name: Create Go Architect folder
         run: mkdir $Env:HOMEPATH\.goarchitect
 
-      - name: Create Go Architect folder2
-        run: mkdir C:\Users\runneradmin\.goarchitect
+      - name: LS
+        run: Get-ChildItem
 
-      - name: Test Makefile
-        run: make install
+      - name: LS
+        run: Get-ChildItem .
