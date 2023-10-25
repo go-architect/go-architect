@@ -8,4 +8,4 @@ jobs:
     runs-on: windows-2019
     steps:
       - name: List
-        run: SET
+        run: env
