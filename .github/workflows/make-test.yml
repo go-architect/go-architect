@@ -49,8 +49,11 @@ jobs:
         with:
           go-version: 1.19
 
-      - name: Create Go Architect folder
+      - name: Create Go Architect folder1
         run: mkdir $Env:HOMEPATH\.goarchitect
+
+      - name: Create Go Architect folder2
+        run: mkdir C:\Users\runneradmin\.goarchitect
 
       - name: Test Makefile
         run: make install
