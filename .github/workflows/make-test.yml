@@ -10,5 +10,8 @@ jobs:
       - name: List
         run: env
 
-      - name: Current Directory
-        run: cd
+      - name: Create Go Architect folder
+        run: mkdir %HOMEPATH%\.goarchitect
+
+      - name: LS
+        run: dir
