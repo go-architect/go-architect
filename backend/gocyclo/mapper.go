@@ -2,6 +2,7 @@ package gocyclo
 
 import (
 	"bufio"
+	"fmt"
 	"strconv"
 	"strings"
 )
@@ -16,7 +17,11 @@ func MapToGoCycloModel(cmdOutput string) *GoCycloOutput {
 		if strings.HasPrefix(line, "Average") {
 			average = mapAverageLine(line)
 		} else {
-			details = append(details, mapLine(line))
+			mappedLine, err := mapLine(line)
+			if err != nil {
+				return nil
+			}
+			details = append(details, mappedLine)
 		}
 	}
 
@@ -32,8 +37,11 @@ func mapAverageLine(line string) float64 {
 	return cx
 }
 
-func mapLine(line string) *ComplexityDetail {
+func mapLine(line string) (*ComplexityDetail, error) {
 	data := strings.Split(line, " ")
+	if len(data) < 4 {
+		return nil, fmt.Errorf("cannot read command output")
+	}
 	cx, _ := strconv.Atoi(data[0])
 
 	return &ComplexityDetail{
@@ -41,7 +49,7 @@ func mapLine(line string) *ComplexityDetail {
 		Package:    data[1],
 		File:       resolveFileDetails(data[3]),
 		Function:   data[2],
-	}
+	}, nil
 }
 
 func resolveFileDetails(input string) string {
