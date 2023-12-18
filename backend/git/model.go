@@ -13,6 +13,12 @@ type Modifications struct {
 	FileModifications []ModificationsInfo
 }
 
+type LogDetails struct {
+	AuthorInfo            map[string]AuthorInfo
+	PathModificationsInfo map[string]ModificationsInfo
+	FileModificationsInfo map[string]ModificationsInfo
+}
+
 type ModificationsInfo struct {
 	Source             string
 	TotalModifications int
