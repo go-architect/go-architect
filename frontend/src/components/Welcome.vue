@@ -13,6 +13,7 @@ export default {
 <template>
   <div class="card">
     <div class="card-body text-center">
+      <img src="/images/logo.png" alt="" class="logo" />
       <h2 class="card-title centered">Welcome to Go Architect</h2>
       <p class="card-text">
         An Architecture Analysis Tool for Golang Projects.
@@ -30,5 +31,11 @@ export default {
   text-align: center;
   font-size: 2.4rem;
   padding-bottom: 10px;
+}
+
+.logo {
+  width: 200px;
+  margin-bottom: 10px;
+  margin-left: -30px;
 }
 </style>
