@@ -1,7 +1,6 @@
 package git
 
 import (
-	"slices"
 	"sort"
 	"testing"
 )
@@ -56,7 +55,7 @@ func Test_Sort_Modifications(t *testing.T) {
 	sort.Sort(sortModificationsSliceByAuthors(originalModifications))
 	sourcesResult := modificationsToSourceSlice(originalModifications)
 
-	if !slices.Equal(sourcesResult, expectedResult) {
+	if !equalSlices(sourcesResult, expectedResult) {
 		t.Fatal("Sorted slice doesn't match expected result.")
 	}
 }
@@ -67,4 +66,16 @@ func modificationsToSourceSlice(modifications []ModificationsInfo) []string {
 		sources = append(sources, m.Source)
 	}
 	return sources
+}
+
+func equalSlices(s1, s2 []string) bool {
+	if len(s1) != len(s2) {
+		return false
+	}
+	for i := range s1 {
+		if s1[i] != s2[i] {
+			return false
+		}
+	}
+	return true
 }
