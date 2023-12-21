@@ -9,32 +9,44 @@
       </div>
     </div>
     <div class="card-body">
-      <div class="legend">
-        <table class="table table-bordered">
-          <thead>
-          <tr>
-            <th colspan="2">Legend</th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr>
-            <td class="dsm-cell internal-package"></td>
-            <td class="xxxx">Internal Packages</td>
-          </tr>
-          <tr>
-            <td class="dsm-cell organization-package"></td>
-            <td class="xxxx">Organization Packages</td>
-          </tr>
-          <tr>
-            <td class="dsm-cell external-package"></td>
-            <td class="xxxx">External Packages</td>
-          </tr>
-          <tr>
-            <td class="dsm-cell standard-package"></td>
-            <td class="xxxx">Standard Packages</td>
-          </tr>
-          </tbody>
-        </table>
+      <div class="row">
+        <div class="col-4">
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="weighted-dsm" v-on:change="switchShowWeighted">
+              <label class="custom-control-label" for="weighted-dsm">Show Weighted DSM</label>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="custom-control custom-switch">
+              <input type="checkbox" class="custom-control-input" id="aggregate-values" v-on:change="switchShowAggregated">
+              <label class="custom-control-label" for="aggregate-values">Aggregate by Package Layer</label>
+            </div>
+          </div>
+        </div>
+        <div class="col-8">
+          <table class="table table-bordered">
+            <thead>
+            <tr>
+              <th colspan="8">Package Layers</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td>Internal Packages</td>
+              <td>Organization Packages</td>
+              <td>External Packages</td>
+              <td>Standard Packages</td>
+            </tr>
+            <tr>
+              <td class="legend internal-package"></td>
+              <td class="legend organization-package"></td>
+              <td class="legend external-package"></td>
+              <td class="legend standard-package"></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div v-if="dsm.length === 0" class="overlay-wrapper" style="height: 300px;">
         <div class="overlay">
@@ -43,20 +55,20 @@
         </div>
       </div>
       <div v-else class="dsm">
-        <table class="table table-responsive table-bordered">
+        <table :class="resolveDSMTableClasses()">
           <thead>
           <tr>
             <th class="package-id">#</th>
             <th>Package</th>
-            <th v-for="(p, idx) in dsm" class="package-id" :title=p[0]>{{ idx+1 }}</th>
+            <th v-for="(p, idx) in dsm" class="package-id" :title=p[1]>{{ idx+1 }}</th>
           </tr>
           </thead>
           <tbody>
           <tr v-for="(p, idx) in dsm">
-            <td class="package-id" :title=p[0]>{{ idx+1 }}</td>
-            <td class="package-name" :title=p[0] :class="resolvePackageClass(p)">{{ wrapPackageName(p[0], mainPackage) }}</td>
-            <td v-for="idx2 in p.length-1" :class="resolveClasses(p, idx, idx2)">
-              {{(idx===idx2-1) ? "": displayValue(p[idx2])}}
+            <td class="package-id" :title=p[1]>{{ idx+1 }}</td>
+            <td class="package-name" :title=p[1] :class="resolveEntryClass(p)">{{ wrapPackageName(p[1], mainPackage) }}</td>
+            <td v-for="idx2 in p.length-2" :class="resolveClasses(p, idx, idx2)">
+              {{(idx===idx2-1) ? "": displayValue(p[idx2+1])}}
             </td>
           </tr>
           </tbody>
@@ -71,6 +83,7 @@ import {defineComponent} from "vue";
 import {getSelectedProject} from "../../../../utils/storage";
 import {GetDSM} from "../../../../../wailsjs/go/main/Api";
 import {dsm} from "../../../../../wailsjs/go/models";
+import {resolvePackageLayer, resolvePackageLayerIndex} from "../../../../utils/packages";
 
 export default defineComponent({
   name: "DependencyGraph",
@@ -80,15 +93,66 @@ export default defineComponent({
   data() {
     return {
       mainPackage: "",
+      weightedDSM: {packages: [] as string[]} as dsm.DependencyStructureMatrix,
       dsm: [] as string[][],
       orgPackages: [] as string[],
+      showWeighted: false,
+      showAggregated: false,
     }
   },
   methods: {
+    switchShowWeighted($event: any) {
+      this.showWeighted = !this.showWeighted
+      this.showDSM()
+    },
+    switchShowAggregated($event: any) {
+      this.dsm = []
+      this.showAggregated = !this.showAggregated
+      this.showDSM()
+    },
+    async showDSM() {
+      const project = await getSelectedProject()
+      this.mainPackage = project?.package!
+      this.dsm = this.mapToViewModel(this.weightedDSM)
+    },
+    reduceToBoolean(matrix: dsm.DependencyStructureMatrix) {
+      if(this.showWeighted) return matrix
+      return {
+        module: matrix.module,
+        packages: matrix.packages,
+        dependencies: matrix.dependencies.map((value: number[]) => {
+          return value.map((v: number) => v > 0 ? 1 : 0)
+        })
+      }
+    },
+    aggregateValues(matrix: dsm.DependencyStructureMatrix) {
+      if(!this.showAggregated) return matrix
+
+      const aggregatedDependencies = [[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]]
+      matrix.dependencies.forEach((values: number[], index: number) => {
+        const destinationLayer = resolvePackageLayerIndex(
+            resolvePackageLayer(matrix.packages[index], this.mainPackage, this.orgPackages))
+        values.forEach((value: number, idx: number) => {
+          const originLayer = resolvePackageLayerIndex(
+              resolvePackageLayer(matrix.packages[idx], this.mainPackage, this.orgPackages))
+         aggregatedDependencies[destinationLayer][originLayer] += value
+        })
+      })
+
+
+      const aggregatedMatrix: dsm.DependencyStructureMatrix = {
+        module: matrix.module,
+        packages: ["Internal Packages", "Organization Packages", "External Packages", "Standard Packages"],
+        dependencies: aggregatedDependencies
+      }
+
+      return aggregatedMatrix
+    },
     mapToViewModel(matrix: dsm.DependencyStructureMatrix) {
-      return matrix.packages.map((pkg: string, index: number) => {
-        const packageEntry = [pkg]
-        packageEntry.push(...matrix.dependencies[index].map((d: number) => ""+d))
+      const processed = this.reduceToBoolean(this.aggregateValues(matrix))
+      return processed.packages.map((entryName: string, index: number) => {
+        const packageEntry = [resolvePackageLayer(entryName, this.mainPackage, this.orgPackages), entryName]
+        packageEntry.push(...processed.dependencies[index].map((d: number) => ""+d))
         return packageEntry
       })
     },
@@ -99,44 +163,38 @@ export default defineComponent({
     isOrganizationPackage(pkg: string) {
       return this.orgPackages.some(op => pkg.startsWith(op))
     },
-    resolvePackageClass(p: any) {
+    resolveEntryClass(p: any) {
       const classes = [];
-      if(p[0].startsWith(this.mainPackage)) {
-        classes.push("internal-package")
-      } else if(this.isOrganizationPackage(p[0])){
-        console.log("OKKKKKKKKKKK", p[0])
-        classes.push("organization-package")
-      } else if(p[0].startsWith("golang.org/x")) {
-        classes.push("standard-package")
-      } else if(!p[0].includes(".")) {
-        classes.push("standard-package")
-      } else {
-        classes.push("external-package")
-      }
+      classes.push(p[0]+"-package")
       return classes
     },
     resolveClasses(p: any, idx1: number, idx2: number) {
       const classes = [];
-      if(p[0].startsWith(this.mainPackage) && this.dsm[idx2-1][0].startsWith(this.mainPackage)){
+      if(p[0]==="internal" && this.dsm[idx2-1][0] === "internal") {
         classes.push("internal-package")
-      } else if(this.isOrganizationPackage(p[0]) && idx2<=idx1){
+      } else if(p[0]==="organization" && idx2<=idx1) {
         classes.push("organization-package")
-      } else if(this.isOrganizationPackage(this.dsm[idx2-1][0]) && idx1<idx2){
+      } else if(this.dsm[idx2-1][0]==="organization" && idx1<idx2) {
         classes.push("organization-package")
-      } else if(p[0].startsWith("golang.org/x") || this.dsm[idx2-1][0].startsWith("golang.org/x")) {
+      } else if(p[0]==="standard" || this.dsm[idx2-1][0]==="standard") {
         classes.push("standard-package")
-      } else if(!p[0].includes(".") || !this.dsm[idx2-1][0].includes(".")) {
-        classes.push("standard-package")
-      } else {
+      } else if(p[0]==="external" || this.dsm[idx2-1][0]==="external") {
         classes.push("external-package")
       }
       classes.push("dsm-cell")
+      if(this.showAggregated){
+        classes.push("aggregated-cell")
+      }
       if(idx1===idx2-1){
         classes.push("same-package")
-      }
-      if(p[idx2]>0){
+      } else if(p[idx2+1]>0){
         classes.push("dependency")
       }
+      return classes.join(" ")
+    },
+    resolveDSMTableClasses() {
+      const classes = ["table", "table-responsive", "table-bordered"]
+      if(this.showAggregated) classes.push("aggregated-dsm")
       return classes.join(" ")
     },
     wrapPackageName(p: string, mainPackage: string) {
@@ -147,10 +205,10 @@ export default defineComponent({
   },
   async mounted() {
     const project = await getSelectedProject()
-    const dsm = await GetDSM(project!)
-    this.dsm = this.mapToViewModel(dsm)
+    this.weightedDSM = await GetDSM(project!)
     this.mainPackage = project?.package!
     this.orgPackages = project?.organization_packages ? project?.organization_packages! : []
+    this.dsm = this.mapToViewModel(this.weightedDSM)
   }
 })
 </script>
@@ -195,8 +253,29 @@ export default defineComponent({
 .standard-package {
   background-color: #FFFBDB;
 }
-.legend {
+.card-body {
   font-size: 10px;
-  width: 200px;
+}
+.legend {
+  width: 25%;
+  height: 20px;
+}
+.custom-control-label {
+  padding-top: 5px;
+}
+
+.aggregated-dsm {
+  font-size: 20px;
+}
+.aggregated-dsm td {
+  vertical-align: middle;
+}
+.aggregated-dsm .package-id {
+  width: 30px;
+}
+.aggregated-cell {
+  width: 75px;
+  height: 75px;
+  vertical-align: middle;
 }
 </style>
