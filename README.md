@@ -1,5 +1,9 @@
 # Go-Architect
+<div align="center">
+<img src="./.github/logo.png" width="300" alt="cantor" align=center />
+</div>
 
+---
 Go-Architect is a Software Architecture Analysis Tool for projects written in Go language. 
 You can use this tool to analyze the design of your artifacts in order to ease decisions related to refactoring your code, 
 fixing issues or evolving the artifact's features.
