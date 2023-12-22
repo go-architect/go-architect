@@ -58,9 +58,9 @@ import {dependency, project} from "../../../../../wailsjs/go/models";
 import {GetDependencyGraph} from "../../../../../wailsjs/go/main/Api";
 import LegendBox from "./LegendBox.vue";
 
-const nodeEdges: any[] = []
-const nodesArray: vis.Node[] = []
-const edgesArray: vis.Edge[] = []
+let nodeEdges: any[] = []
+let nodesArray: vis.Node[] = []
+let edgesArray: vis.Edge[] = []
 type SelectedNodeType = {
   package: string,
   dependencies: string[],
@@ -77,11 +77,12 @@ export default defineComponent( {
       selectedNode: undefined as SelectedNodeType | undefined,
       project: null as project.ProjectInfo | null,
       result: undefined as dependency.ModuleDependencyGraph | undefined,
-      nodesSize: 0
     }
   },
   methods: {
     mapToNetworkGraph(dg: dependency.ModuleDependencyGraph) {
+      nodesArray = []
+      edgesArray = []
       this.mapNodes(dg)
       this.mapEdges(dg)
     },
@@ -145,8 +146,6 @@ export default defineComponent( {
           shape: 'box'
         })
       }
-      this.nodesSize = dg.internal.length + dg.external.length + dg.standard.length
-      if(dg.organization != null) this.nodesSize += dg.organization.length
     }
   },
   async mounted() {
