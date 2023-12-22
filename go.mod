@@ -3,7 +3,7 @@ module github.com/go-architect/go-architect
 go 1.18
 
 require (
-	github.com/go-architect/go-architect-lib v1.2.1
+	github.com/go-architect/go-architect-lib v1.2.2
 	github.com/go-git/go-git/v5 v5.5.1
 	github.com/stretchr/testify v1.8.4
 	github.com/wailsapp/wails/v2 v2.6.0
