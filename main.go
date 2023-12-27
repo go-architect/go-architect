@@ -55,7 +55,6 @@ func resolveWailsOptions() *options.App {
 			app,
 			api,
 		},
-		//		Menu:               applicationMenu,
 		Logger:             fileLogger,
 		LogLevel:           logger.DEBUG,
 		LogLevelProduction: logger.INFO,
