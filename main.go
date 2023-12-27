@@ -30,18 +30,20 @@ func main() {
 	app = NewApp()
 	api = NewApi()
 
-	applicationMenu := menu.NewMenu()
-	applicationMenu.Append(menu.AppMenu())
-	if goRuntime.GOOS == "darwin" {
-		applicationMenu.Append(menu.EditMenu()) // on macos platform, we should append EditMenu to enable Cmd+C,Cmd+V,Cmd+Z... shortcut
-	}
+	// Create application with options
+	err := wails.Run(resolveWailsOptions())
 
+	if err != nil {
+		println("Error:", err.Error())
+	}
+}
+
+func resolveWailsOptions() *options.App {
 	logFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/goarchitect.log")
 	checkForLoggingFile(logFile)
 	fileLogger := logger.NewFileLogger(logFile)
 
-	// Create application with options
-	err := wails.Run(&options.App{
+	options := &options.App{
 		Title:            "Go Architect",
 		WindowStartState: options.Maximised,
 		AssetServer: &assetserver.Options{
@@ -53,7 +55,6 @@ func main() {
 			app,
 			api,
 		},
-		Menu:               applicationMenu,
 		Logger:             fileLogger,
 		LogLevel:           logger.DEBUG,
 		LogLevelProduction: logger.INFO,
@@ -63,11 +64,16 @@ func main() {
 				Message: "© 2022 - Francisco Daines",
 			},
 		},
-	})
-
-	if err != nil {
-		println("Error:", err.Error())
 	}
+
+	if goRuntime.GOOS == "darwin" {
+		applicationMenu := menu.NewMenu()
+		applicationMenu.Append(menu.AppMenu())
+		applicationMenu.Append(menu.EditMenu()) // on macos platform, we should append EditMenu to enable Cmd+C,Cmd+V,Cmd+Z... shortcut
+		options.Menu = applicationMenu
+	}
+
+	return options
 }
 
 func checkForLoggingFile(filename string) {
