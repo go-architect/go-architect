@@ -24,7 +24,6 @@ export default defineComponent({
   },
   async mounted(){
     this.check = await CheckEnvironmentPath()
-    console.log("check", this.check)
   }
 })
 </script>
