@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"embed"
+	"fmt"
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/logger"
 	"github.com/wailsapp/wails/v2/pkg/menu"
@@ -34,12 +35,16 @@ func main() {
 	err := wails.Run(resolveWailsOptions())
 
 	if err != nil {
-		println("Error:", err.Error())
+		fmt.Printf("Error running Go-Architect: %+v\n", err.Error())
 	}
 }
 
 func resolveWailsOptions() *options.App {
-	logFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/goarchitect.log")
+	homeDir, err := os.UserHomeDir()
+	if err != nil {
+		fmt.Printf("Error trying to detect User HomeDir: %+v\n", err)
+	}
+	logFile := homeDir + filepath.FromSlash("/.goarchitect/goarchitect.log")
 	checkForLoggingFile(logFile)
 	fileLogger := logger.NewFileLogger(logFile)
 
