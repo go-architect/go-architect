@@ -11,7 +11,6 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/options/mac"
 	"os"
-	"path"
 	"path/filepath"
 	goRuntime "runtime"
 )
@@ -82,7 +81,7 @@ func resolveWailsOptions() *options.App {
 }
 
 func checkForLoggingFile(filename string) {
-	dir := path.Dir(filename)
+	dir := filepath.Dir(filename)
 	if _, err := os.Stat(dir); os.IsNotExist(err) {
 		err = os.Mkdir(dir, 0755)
 		if err != nil {
