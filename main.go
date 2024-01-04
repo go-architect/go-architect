@@ -40,7 +40,7 @@ func main() {
 }
 
 func resolveWailsOptions() *options.App {
-	logFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/goarchitect.log")
+	logFile := utils.GetHomeDir(nil) + filepath.FromSlash("/.goarchitect/goarchitect.log")
 	checkForLoggingFile(logFile)
 	fileLogger := logger.NewFileLogger(logFile)
 

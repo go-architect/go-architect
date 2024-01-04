@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-architect/go-architect/backend/storage"
 	"github.com/go-architect/go-architect/backend/utils"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -38,14 +37,14 @@ func (a *App) OpenDirectoryDialog() string {
 }
 
 func (a *App) CheckEnvironmentPath() bool {
-	envFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/environment")
+	envFile := utils.GetHomeDir(a.ctx) + filepath.FromSlash("/.goarchitect/environment")
 	runtime.LogInfof(a.ctx, "CheckEnvironmentPath - EnvFile: %s", envFile)
 
 	if doesFileExist(envFile) {
 		runtime.LogInfof(a.ctx, "CheckEnvironmentPath - EnvFile exists")
 		b, err := os.ReadFile(envFile)
 		if err != nil {
-			fmt.Print(err)
+			runtime.LogErrorf(a.ctx, "CheckEnvironmentPath - Error: %s", err.Error())
 		} else {
 			customPath := strings.TrimSuffix(string(b), "\n")
 			os.Setenv("PATH", customPath+":"+os.Getenv("PATH"))
@@ -70,23 +69,23 @@ func (a *App) CheckEnvironmentPath() bool {
 }
 
 func (a *App) GetProjectList() storage.ProjectList {
-	return storage.GetProjectList()
+	return storage.GetProjectList(a.ctx)
 }
 
 func (a *App) SaveProjectList(projects storage.ProjectList) {
-	storage.SaveProjectList(projects)
+	storage.SaveProjectList(a.ctx, projects)
 }
 
 func (a *App) SaveSelectedProject(project storage.Project) {
-	storage.SaveSelectedProject(project)
+	storage.SaveSelectedProject(a.ctx, project)
 }
 
 func (a *App) RemoveSelectedProject() {
-	storage.RemoveSelectedProject()
+	storage.RemoveSelectedProject(a.ctx)
 }
 
 func (a *App) GetSelectedProject() storage.SelectedProject {
-	return storage.GetSelectedProject()
+	return storage.GetSelectedProject(a.ctx)
 }
 
 func (a *App) GetGoVersion() string {
