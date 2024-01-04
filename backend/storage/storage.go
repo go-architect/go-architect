@@ -3,6 +3,7 @@ package storage
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-architect/go-architect/backend/utils"
 	"os"
 	"path"
 	"path/filepath"
@@ -10,7 +11,7 @@ import (
 
 func GetProjectList() ProjectList {
 	var projectList ProjectList
-	dbFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/db/projects.json")
+	dbFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/db/projects.json")
 	fmt.Printf("DBFile: %s\n", dbFile)
 	fileContent, err := os.ReadFile(dbFile)
 	if err != nil {
@@ -27,20 +28,20 @@ func GetProjectList() ProjectList {
 }
 
 func SaveProjectList(projectList ProjectList) {
-	dbFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/db/projects.json")
+	dbFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/db/projects.json")
 	jsonData, _ := json.Marshal(projectList)
 	os.WriteFile(dbFile, jsonData, 0755)
 }
 
 func SaveSelectedProject(project Project) {
-	dbFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/db/project.json")
+	dbFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/db/project.json")
 	jsonData, _ := json.Marshal(project)
 	os.WriteFile(dbFile, jsonData, 0755)
 }
 
 func GetSelectedProject() SelectedProject {
 	var project Project
-	dbFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/db/project.json")
+	dbFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/db/project.json")
 	fileContent, err := os.ReadFile(dbFile)
 	if err != nil {
 		return SelectedProject{Selected: false}
@@ -54,7 +55,7 @@ func GetSelectedProject() SelectedProject {
 }
 
 func RemoveSelectedProject() {
-	dbFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/db/project.json")
+	dbFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/db/project.json")
 	os.Remove(dbFile)
 }
 

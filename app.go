@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-architect/go-architect/backend/storage"
+	"github.com/go-architect/go-architect/backend/utils"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 	exec "golang.org/x/sys/execabs"
 	"os"
@@ -37,7 +38,7 @@ func (a *App) OpenDirectoryDialog() string {
 }
 
 func (a *App) CheckEnvironmentPath() bool {
-	envFile := os.Getenv("HOME") + filepath.FromSlash("/.goarchitect/environment")
+	envFile := utils.GetHomeDir() + filepath.FromSlash("/.goarchitect/environment")
 	runtime.LogInfof(a.ctx, "CheckEnvironmentPath - EnvFile: %s", envFile)
 
 	if doesFileExist(envFile) {
