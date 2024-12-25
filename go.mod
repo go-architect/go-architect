@@ -1,6 +1,8 @@
 module github.com/go-architect/go-architect
 
-go 1.18
+go 1.21
+
+toolchain go1.23.1
 
 require (
 	github.com/go-architect/go-architect-lib v1.2.2
