@@ -4,11 +4,11 @@ import ProjectList = storage.ProjectList;
 import Project = storage.Project;
 
 export const getSelectedProject = async (): Promise<Project | null> => {
-    const sp = await GetSelectedProject()
+    const sp = await GetSelectedProject();
     if (!sp.Selected) {
-        return null
+        return null;
     }
-    return sp.Project
+    return sp.Project ?? null;
 }
 
 export const saveSelectedProject = async (project: any) => {
